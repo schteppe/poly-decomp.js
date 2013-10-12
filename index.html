@@ -103,10 +103,14 @@
     var settings = {
         minEdgeLength : 50,
         quickDecomp : true,
+        removeCollinear:true,
+        collinearThreshold:0.001,
     };
     var gui = new dat.GUI();
     gui.add(settings, 'minEdgeLength', 1, 100);
     gui.add(settings, 'quickDecomp');
+    gui.add(settings, 'removeCollinear');
+    gui.add(settings, 'collinearThreshold',0,Math.PI/4);
 
     function getMousePos(e){
         var offset = $(e.target).offset();
@@ -134,14 +138,22 @@
         var p = new decomp.Polygon();
         p.vertices = path;
         if(p.isSimple()){
+
+            console.log("Making the polygon CCW...");
             p.makeCCW();
+
+            if(settings.removeCollinear){
+                console.log("Removing collinear points...");
+                p.removeCollinearPoints(settings.collinearThreshold);
+            }
+
             console.log("Decomposing polygon of size "+path.length+"...");
-            console.log("Slicing the polygon...");
             if(settings.quickDecomp)
                 polys = p.quickDecomp();
             else
                 polys = p.decomp();
             console.log("Got "+polys.length+" slices. Done.");
+
         } else {
             console.log("The polygon was not simple. Aborting...");
         }
