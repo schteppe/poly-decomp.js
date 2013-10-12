@@ -3,11 +3,15 @@ poly-decomp.js
 
 Library for decomposing 2D polygons into convex regions.
 
+[Demo](http://schteppe.github.io/poly-decomp.js/) - [Documentation](http://schteppe.github.io/poly-decomp.js/docs)
+
+### About
+
 The library is a manual port of the C++ library [Poly Decomp](http://mnbayazit.com/406/overview) by [Mark Bayazit](http://mnbayazit.com/).
 
 It implements two algorithms, one optimal (but slow) and one less optimal (but fast).
 
-## Usage
+### Usage
 
 ```js
 // Create a concave polygon
