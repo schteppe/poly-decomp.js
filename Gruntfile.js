@@ -12,10 +12,18 @@ module.exports = function(grunt) {
                 }
             }
         },
+
+        uglify : {
+            build : {
+                src : ['build/decomp.js'],
+                dest : 'build/decomp.min.js'
+            }
+        },
     });
 
     grunt.loadNpmTasks('grunt-browserify');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
 
-    grunt.registerTask('default', ['browserify']);
+    grunt.registerTask('default', ['browserify','uglify']);
 
 };
