@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    body {
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+    }
+</style>
+</head>
+<body>
+    <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+    <script src="build/decomp.js"></script>
+    <script>
+    window.requestAnimFrame = (function(callback) {
+        return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
+        function(callback) {
+            window.setTimeout(callback, 1000 / 60);
+        };
+    })();
+
+    var path = [],
+        polys = [],
+        mousedown = false,
+        colors = ["#f99","#9f9","#99f","#ff9"];
+
+    var canvas = document.createElement('canvas');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    document.body.appendChild(canvas);
+    function animate() {
+        var c = canvas.getContext('2d');
+
+        // clear
+        c.clearRect(0, 0, canvas.width, canvas.height);
+
+        c.fillStyle = "red";
+        c.strokeStyle = "black";
+
+        // draw the current path
+        if(mousedown){
+            c.beginPath();
+            for(var i=0; i<path.length-1; i++){
+                c.moveTo(path[i][0],path[i][1]);
+                c.lineTo(path[i+1][0],path[i+1][1]);
+            }
+            c.fill();
+            c.stroke();
+
+            for(var i=0; i<path.length-1; i++){
+                c.beginPath();
+                c.arc(path[i][0],path[i][1],2,0,2*Math.PI);
+                c.fill();
+            }
+        }
+
+        // Draw the convex decomp if it exists
+        for(var i=0; i<polys.length; i++){
+            c.fillStyle = colors[i%(colors.length)];
+            var poly = polys[i];
+            c.beginPath();
+            var p = poly.vertices[0];
+            c.moveTo(p[0],p[1]);
+            for(var j=0; j<poly.vertices.length; j++){
+                var p = poly.vertices[j];
+                c.lineTo(p[0],p[1]);
+            }
+            c.closePath();
+            c.fill();
+        }
+
+        requestAnimFrame(animate);
+    }
+    animate();
+
+    function getMousePos(e){
+        var offset = $("canvas").offset();
+        return [e.clientX + offset.left,e.clientY + offset.top];
+    }
+
+    var precision = 50;
+
+    $("canvas").mousedown(function(e){
+        path = [];
+        path.push(getMousePos(e));
+        mousedown = true;
+    }).mousemove(function(e){
+        var point = getMousePos(e);
+        if(mousedown && decomp.Point.sqdist(point,path[path.length-1])>precision*precision){
+            path.push(point);
+        }
+    }).mouseup(function(e){
+        mousedown = false;
+        if(true){ // Check whether the polygon is simple!
+            var p = new decomp.Polygon();
+            p.vertices = path.slice(0);
+            if(p.isSimple()){
+                p.makeCCW();
+                console.log("Decomposing polygon of size "+path.length+"...");
+                //cutEdges = p.decomp();
+                console.log("Slicing the polygon...");
+                //polys = p.slice(cutEdges);
+                polys = p.quickDecomp();
+                console.log("Got "+polys.length+" slices. Done.");
+            } else {
+                console.log("The polygon was not simple. Aborting...");
+            }
+        }
+        path = [];
+    });
+
+    </script>
+</body>
+</html>
