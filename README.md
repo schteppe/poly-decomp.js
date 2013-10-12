@@ -54,6 +54,11 @@ Then require it like so:
 var decomp = require('poly-decomp');
 ```
 
+### Change log
+##### 0.1
+* Added method ```Polygon.prototype.removeCollinearPoints```.
+* Added optional parameter ```thresholdAngle``` to ```Point.collinear(a,b,c,thresholdAngle)```.
+
 ### Contribute
 Make sure you have git, [Node.js](http://nodejs.org), NPM and [grunt](http://gruntjs.com/) installed.
 ```

@@ -2,7 +2,7 @@
     "project": {
         "name": "poly-decomp.js",
         "description": "2D polygon decomposition",
-        "version": "0.0.1"
+        "version": "0.1.0"
     },
     "files": {
         "src/Line.js": {
