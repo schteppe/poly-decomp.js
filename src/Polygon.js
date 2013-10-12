@@ -477,7 +477,7 @@ Polygon.prototype.quickDecomp = function(result,reflexVertices,steinerPoints,del
 /**
  * Remove collinear points in the polygon.
  * @method removeCollinearPoints
- * @param  {Number} precision The threshold angle to use when determining whether two edges are collinear. Use zero for finest precision.
+ * @param  {Number} [precision] The threshold angle to use when determining whether two edges are collinear. Use zero for finest precision.
  * @return {Number}           The number of points removed
  */
 Polygon.prototype.removeCollinearPoints = function(precision){

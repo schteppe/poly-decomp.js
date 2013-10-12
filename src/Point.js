@@ -37,6 +37,16 @@ Point.rightOn = function(a,b,c) {
 
 var tmpPoint1 = [],
     tmpPoint2 = [];
+
+/**
+ * Check if three points are collinear
+ * @method collinear
+ * @param  {Array} a
+ * @param  {Array} b
+ * @param  {Array} c
+ * @param  {Number} [thresholdAngle=0] Threshold angle to use when comparing the vectors. The function will return true if the angle between the resulting vectors is less than this value. Use zero for max precision.
+ * @return {Boolean}
+ */
 Point.collinear = function(a,b,c,thresholdAngle) {
     if(!thresholdAngle)
         return Point.area(a, b, c) == 0;
