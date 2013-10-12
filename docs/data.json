@@ -190,6 +190,42 @@
             "class": "Point"
         },
         {
+            "file": "src/Point.js",
+            "line": 41,
+            "description": "Check if three points are collinear",
+            "itemtype": "method",
+            "name": "collinear",
+            "params": [
+                {
+                    "name": "a",
+                    "description": "",
+                    "type": "Array"
+                },
+                {
+                    "name": "b",
+                    "description": "",
+                    "type": "Array"
+                },
+                {
+                    "name": "c",
+                    "description": "",
+                    "type": "Array"
+                },
+                {
+                    "name": "thresholdAngle",
+                    "description": "Threshold angle to use when comparing the vectors. The function will return true if the angle between the resulting vectors is less than this value. Use zero for max precision.",
+                    "type": "Number",
+                    "optional": true,
+                    "optdefault": "0"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "Point"
+        },
+        {
             "file": "src/Polygon.js",
             "line": 14,
             "description": "Vertices that this polygon consists of. An array of array of numbers, example: [[0,0],[1,0],..]",
@@ -482,6 +518,26 @@
             "return": {
                 "description": "",
                 "type": "Array"
+            },
+            "class": "Polygon"
+        },
+        {
+            "file": "src/Polygon.js",
+            "line": 477,
+            "description": "Remove collinear points in the polygon.",
+            "itemtype": "method",
+            "name": "removeCollinearPoints",
+            "params": [
+                {
+                    "name": "precision",
+                    "description": "The threshold angle to use when determining whether two edges are collinear. Use zero for finest precision.",
+                    "type": "Number",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "The number of points removed",
+                "type": "Number"
             },
             "class": "Polygon"
         },

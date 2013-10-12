@@ -568,6 +568,25 @@ Polygon.prototype.quickDecomp = function(result,reflexVertices,steinerPoints,del
     return result;
 };
 
+/**
+ * Remove collinear points in the polygon.
+ * @method removeCollinearPoints
+ * @param  {Number} [precision] The threshold angle to use when determining whether two edges are collinear. Use zero for finest precision.
+ * @return {Number}           The number of points removed
+ */
+Polygon.prototype.removeCollinearPoints = function(precision){
+    var num = 0;
+    for(var i=this.vertices.length-1; this.vertices.length&gt;3 &amp;&amp; i&gt;=0; --i){
+        if(Point.collinear(this.at(i-1),this.at(i),this.at(i+1),precision)){
+            // Remove the middle point
+            this.vertices.splice(i%this.vertices.length,1);
+            i--; // Jump one point forward. Otherwise we may get a chain removal
+            num++;
+        }
+    }
+    return num;
+};
+
     </pre>
 </div>
 
