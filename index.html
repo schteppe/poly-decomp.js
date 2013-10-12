@@ -13,13 +13,6 @@
     <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
     <script src="build/decomp.js"></script>
     <script>
-    window.requestAnimFrame = (function(callback) {
-        return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
-        function(callback) {
-            window.setTimeout(callback, 1000 / 60);
-        };
-    })();
-
     var path = [],
         polys = [],
         mousedown = false,
@@ -29,7 +22,7 @@
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     document.body.appendChild(canvas);
-    function animate() {
+    function render() {
         var c = canvas.getContext('2d');
 
         // clear
@@ -69,10 +62,8 @@
             c.closePath();
             c.fill();
         }
-
-        requestAnimFrame(animate);
     }
-    animate();
+    render();
 
     function getMousePos(e){
         var offset = $("canvas").offset();
@@ -85,29 +76,30 @@
         path = [];
         path.push(getMousePos(e));
         mousedown = true;
+        render();
     }).mousemove(function(e){
         var point = getMousePos(e);
         if(mousedown && decomp.Point.sqdist(point,path[path.length-1])>precision*precision){
             path.push(point);
+            render();
         }
     }).mouseup(function(e){
         mousedown = false;
-        if(true){ // Check whether the polygon is simple!
-            var p = new decomp.Polygon();
-            p.vertices = path.slice(0);
-            if(p.isSimple()){
-                p.makeCCW();
-                console.log("Decomposing polygon of size "+path.length+"...");
-                //cutEdges = p.decomp();
-                console.log("Slicing the polygon...");
-                //polys = p.slice(cutEdges);
-                polys = p.quickDecomp();
-                console.log("Got "+polys.length+" slices. Done.");
-            } else {
-                console.log("The polygon was not simple. Aborting...");
-            }
+        var p = new decomp.Polygon();
+        p.vertices = path.slice(0);
+        if(p.isSimple()){
+            p.makeCCW();
+            console.log("Decomposing polygon of size "+path.length+"...");
+            //cutEdges = p.decomp();
+            console.log("Slicing the polygon...");
+            //polys = p.slice(cutEdges);
+            polys = p.quickDecomp();
+            console.log("Got "+polys.length+" slices. Done.");
+        } else {
+            console.log("The polygon was not simple. Aborting...");
         }
         path = [];
+        render();
     });
 
     </script>
