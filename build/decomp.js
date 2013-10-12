@@ -103,6 +103,16 @@ Point.rightOn = function(a,b,c) {
 
 var tmpPoint1 = [],
     tmpPoint2 = [];
+
+/**
+ * Check if three points are collinear
+ * @method collinear
+ * @param  {Array} a
+ * @param  {Array} b
+ * @param  {Array} c
+ * @param  {Number} [thresholdAngle=0] Threshold angle to use when comparing the vectors. The function will return true if the angle between the resulting vectors is less than this value. Use zero for max precision.
+ * @return {Boolean}
+ */
 Point.collinear = function(a,b,c,thresholdAngle) {
     if(!thresholdAngle)
         return Point.area(a, b, c) == 0;
@@ -609,7 +619,7 @@ Polygon.prototype.quickDecomp = function(result,reflexVertices,steinerPoints,del
 /**
  * Remove collinear points in the polygon.
  * @method removeCollinearPoints
- * @param  {Number} precision The threshold angle to use when determining whether two edges are collinear. Use zero for finest precision.
+ * @param  {Number} [precision] The threshold angle to use when determining whether two edges are collinear. Use zero for finest precision.
  * @return {Number}           The number of points removed
  */
 Polygon.prototype.removeCollinearPoints = function(precision){
