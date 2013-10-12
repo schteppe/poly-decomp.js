@@ -25,19 +25,37 @@ Point.left = function(a,b,c){
 
 Point.leftOn = function(a,b,c) {
     return Point.area(a, b, c) >= 0;
-}
+};
 
 Point.right = function(a,b,c) {
     return Point.area(a, b, c) < 0;
-}
+};
 
 Point.rightOn = function(a,b,c) {
     return Point.area(a, b, c) <= 0;
-}
+};
 
-Point.collinear = function(a,b,c) {
-    return Point.area(a, b, c) == 0;
-}
+var tmpPoint1 = [],
+    tmpPoint2 = [];
+Point.collinear = function(a,b,c,thresholdAngle) {
+    if(!thresholdAngle)
+        return Point.area(a, b, c) == 0;
+    else {
+        var ab = tmpPoint1,
+            bc = tmpPoint2;
+
+        ab[0] = b[0]-a[0];
+        ab[1] = b[1]-a[1];
+        bc[0] = c[0]-b[0];
+        bc[1] = c[1]-b[1];
+
+        var dot = ab[0]*bc[0] + ab[1]*bc[1],
+            magA = Math.sqrt(ab[0]*ab[0] + ab[1]*ab[1]),
+            magB = Math.sqrt(bc[0]*bc[0] + bc[1]*bc[1]),
+            angle = Math.acos(dot/(magA*magB));
+        return angle < thresholdAngle;
+    }
+};
 
 Point.sqdist = function(a,b){
     var dx = b[0] - a[0];
