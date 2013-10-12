@@ -135,27 +135,29 @@
         }
     }).mouseup(function(e){
         mousedown = false;
-        var p = new decomp.Polygon();
-        p.vertices = path;
-        if(p.isSimple()){
+        if(path.length > 3){
+            var p = new decomp.Polygon();
+            p.vertices = path;
+            if(p.isSimple()){
 
-            console.log("Making the polygon CCW...");
-            p.makeCCW();
+                console.log("Making the polygon CCW...");
+                p.makeCCW();
 
-            if(settings.removeCollinear){
-                console.log("Removing collinear points...");
-                p.removeCollinearPoints(settings.collinearThreshold);
+                if(settings.removeCollinear){
+                    console.log("Removing collinear points...");
+                    p.removeCollinearPoints(settings.collinearThreshold);
+                }
+
+                console.log("Decomposing polygon of size "+path.length+"...");
+                if(settings.quickDecomp)
+                    polys = p.quickDecomp();
+                else
+                    polys = p.decomp();
+                console.log("Got "+polys.length+" slices. Done.");
+
+            } else {
+                console.log("The polygon was not simple. Aborting...");
             }
-
-            console.log("Decomposing polygon of size "+path.length+"...");
-            if(settings.quickDecomp)
-                polys = p.quickDecomp();
-            else
-                polys = p.decomp();
-            console.log("Got "+polys.length+" slices. Done.");
-
-        } else {
-            console.log("The polygon was not simple. Aborting...");
         }
         path = [];
         render();
