@@ -7,9 +7,18 @@
         padding: 0px;
         overflow: hidden;
     }
+    canvas {
+        position:absolute;
+        top:0;
+        left:0;
+    }
 </style>
 </head>
 <body>
+    <h1>poly-decomp.js</h1>
+    <p>Decomposition of 2D polygons into convex pieces in JavaScript.</p>
+    <p>Try drawing a polygon!</p>
+
     <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
     <script src="build/decomp.js"></script>
     <script>
@@ -22,6 +31,7 @@
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     document.body.appendChild(canvas);
+
     function render() {
         var c = canvas.getContext('2d');
 
@@ -74,6 +84,7 @@
 
     $("canvas").mousedown(function(e){
         path = [];
+        polys = [];
         path.push(getMousePos(e));
         mousedown = true;
         render();
