@@ -21,6 +21,7 @@
 
     <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
     <script src="build/decomp.js"></script>
+    <script src="dat.gui.js"></script>
     <script>
     var path = [],
         polys = [],
@@ -72,15 +73,34 @@
             c.closePath();
             c.fill();
         }
+
+        // Draw points
+        c.fillStyle = "black";
+        for(var i=0; i<polys.length; i++){
+            var poly = polys[i];
+            for(var j=0; j<poly.vertices.length; j++){
+                var p = poly.vertices[j];
+                c.beginPath();
+                c.arc(p[0],p[1],1,0,2*Math.PI);
+                c.fill();
+            }
+        }
     }
     render();
+
+    // Setup GUI
+    var settings = {
+        minEdgeLength : 50,
+        quickDecomp : true,
+    };
+    var gui = new dat.GUI();
+    gui.add(settings, 'minEdgeLength', 1, 100);
+    gui.add(settings, 'quickDecomp');
 
     function getMousePos(e){
         var offset = $("canvas").offset();
         return [e.clientX + offset.left,e.clientY + offset.top];
     }
-
-    var precision = 50;
 
     $("canvas").mousedown(function(e){
         path = [];
@@ -90,21 +110,22 @@
         render();
     }).mousemove(function(e){
         var point = getMousePos(e);
-        if(mousedown && decomp.Point.sqdist(point,path[path.length-1])>precision*precision){
+        if(mousedown && decomp.Point.sqdist(point,path[path.length-1])>settings.minEdgeLength*settings.minEdgeLength){
             path.push(point);
             render();
         }
     }).mouseup(function(e){
         mousedown = false;
         var p = new decomp.Polygon();
-        p.vertices = path.slice(0);
+        p.vertices = path;
         if(p.isSimple()){
             p.makeCCW();
             console.log("Decomposing polygon of size "+path.length+"...");
-            //cutEdges = p.decomp();
             console.log("Slicing the polygon...");
-            //polys = p.slice(cutEdges);
-            polys = p.quickDecomp();
+            if(settings.quickDecomp)
+                polys = p.quickDecomp();
+            else
+                polys = p.decomp();
             console.log("Got "+polys.length+" slices. Done.");
         } else {
             console.log("The polygon was not simple. Aborting...");
