@@ -4,28 +4,68 @@ var Line = require("./Line")
 
 module.exports = Polygon;
 
+/**
+ * Polygon class.
+ * @class Polygon
+ * @constructor
+ */
 function Polygon(){
+
+    /**
+     * Vertices that this polygon consists of. An array of array of numbers, example: [[0,0],[1,0],..]
+     * @property vertices
+     * @type {Array}
+     */
     this.vertices = [];
 }
 
+/**
+ * Get a vertex at position i. It does not matter if i is out of bounds, this function will just cycle.
+ * @method at
+ * @param  {Number} i
+ * @return {Array}
+ */
 Polygon.prototype.at = function(i){
     var v = this.vertices,
         s = v.length;
     return v[i < 0 ? i % s + s : i % s];
 };
 
+/**
+ * Get first vertex
+ * @method first
+ * @return {Array}
+ */
 Polygon.prototype.first = function(){
     return this.vertices[0];
 };
 
+/**
+ * Get last vertex
+ * @method last
+ * @return {Array}
+ */
 Polygon.prototype.last = function(){
     return this.vertices[this.vertices.length-1];
 };
 
+/**
+ * Clear the polygon data
+ * @method clear
+ * @return {Array}
+ */
 Polygon.prototype.clear = function(){
     this.vertices.length = 0;
 };
 
+/**
+ * Append points "from" to "to"-1 from an other polygon "poly" onto this one.
+ * @method append
+ * @param {Polygon} poly The polygon to get points from.
+ * @param {Number}  from The vertex index in "poly".
+ * @param {Number}  to The end vertex index in "poly". Note that this vertex is NOT included when appending.
+ * @return {Array}
+ */
 Polygon.prototype.append = function(poly,from,to){
     if(typeof(from) == "undefined") throw new Error("From is not given!");
     if(typeof(to) == "undefined")   throw new Error("To is not given!");
@@ -39,6 +79,10 @@ Polygon.prototype.append = function(poly,from,to){
     }
 };
 
+/**
+ * Make sure that the polygon vertices are ordered counter-clockwise.
+ * @method makeCCW
+ */
 Polygon.prototype.makeCCW = function(){
     var br = 0,
         v = this.vertices;
@@ -56,6 +100,10 @@ Polygon.prototype.makeCCW = function(){
     }
 };
 
+/**
+ * Reverse the vertices in the polygon
+ * @method reverse
+ */
 Polygon.prototype.reverse = function(){
     var tmp = [];
     for(var i=0, N=this.vertices.length; i!==N; i++){
@@ -64,12 +112,26 @@ Polygon.prototype.reverse = function(){
     this.vertices = tmp;
 };
 
+/**
+ * Check if a point in the polygon is a reflex point
+ * @method isReflex
+ * @param  {Number}  i
+ * @return {Boolean}
+ */
 Polygon.prototype.isReflex = function(i){
     return Point.right(this.at(i - 1), this.at(i), this.at(i + 1));
 };
 
 var tmpLine1=[],
     tmpLine2=[];
+
+/**
+ * Check if two vertices in the polygon can see each other
+ * @method canSee
+ * @param  {Number} a Vertex index 1
+ * @param  {Number} b Vertex index 2
+ * @return {Boolean}
+ */
 Polygon.prototype.canSee = function(a,b) {
     var p, dist, l1=tmpLine1, l2=tmpLine2;
 
@@ -95,6 +157,14 @@ Polygon.prototype.canSee = function(a,b) {
     return true;
 };
 
+/**
+ * Copy the polygon from vertex i to vertex j.
+ * @method copy
+ * @param  {Number} i
+ * @param  {Number} j
+ * @param  {Polygon} [targetPoly]   Optional target polygon to save in.
+ * @return {Polygon}                The resulting copy.
+ */
 Polygon.prototype.copy = function(i,j,targetPoly){
     var p = targetPoly || new Polygon();
     p.clear();
@@ -119,7 +189,8 @@ Polygon.prototype.copy = function(i,j,targetPoly){
 
 /**
  * Decomposes the polygon into convex pieces. Returns a list of edges [[p1,p2],[p2,p3],...] that cuts the polygon.
- * @method decomp
+ * Note that this algorithm has complexity O(N^4) and will be very slow for polygons with many vertices.
+ * @method getCutEdges
  * @return {Array}
  */
 Polygon.prototype.getCutEdges = function() {
@@ -149,6 +220,11 @@ Polygon.prototype.getCutEdges = function() {
     return min;
 };
 
+/**
+ * Decomposes the polygon into one or more convex sub-Polygons.
+ * @method decomp
+ * @return {Array} An array or Polygon objects.
+ */
 Polygon.prototype.decomp = function(){
     var edges = this.getCutEdges();
     if(edges.length > 0)
@@ -159,6 +235,8 @@ Polygon.prototype.decomp = function(){
 
 /**
  * Slices the polygon given one or more cut edges. If given one, this function will return two polygons (false on failure). If many, an array of polygons.
+ * @method slice
+ * @param {Array} cutEdges A list of edges, as returned by .getCutEdges()
  * @return {Array}
  */
 Polygon.prototype.slice = function(cutEdges){
@@ -200,7 +278,8 @@ Polygon.prototype.slice = function(cutEdges){
 };
 
 /**
- * Check if a path is OK to decompose. Basically checks that the line segments do not overlap.
+ * Checks that the line segments of this polygon do not intersect each other.
+ * @method isSimple
  * @param  {Array} path An array of vertices e.g. [[0,0],[0,1],...]
  * @return {Boolean}
  * @todo Should it check all segments with all others?
@@ -226,14 +305,6 @@ Polygon.prototype.isSimple = function(){
     return true;
 };
 
-/**
- * Calculates the intersection between two line segments.
- * @param {Array} p1 The start vertex of the first line segment.
- * @param {Array} p2 The end vertex of the first line segment.
- * @param {Array} q1 The start vertex of the second line segment.
- * @param {Array} q2 The end vertex of the second line segment.
- * @return {Array} Returns the point of intersection, or [0,0] if there is no intersection.
- */
 function getIntersectionPoint(p1, p2, q1, q2, delta){
     delta = delta || 0;
    var a1 = p2[1] - p1[1];
@@ -250,6 +321,17 @@ function getIntersectionPoint(p1, p2, q1, q2, delta){
       return [0,0]
 }
 
+/**
+ * Quickly decompose the Polygon into convex sub-polygons.
+ * @method quickDecomp
+ * @param  {Array} result
+ * @param  {Array} [reflexVertices]
+ * @param  {Array} [steinerPoints]
+ * @param  {Number} [delta]
+ * @param  {Number} [maxlevel]
+ * @param  {Number} [level]
+ * @return {Array}
+ */
 Polygon.prototype.quickDecomp = function(result,reflexVertices,steinerPoints,delta,maxlevel,level){
     maxlevel = maxlevel || 100;
     level = level || 0;

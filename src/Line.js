@@ -2,9 +2,21 @@ var Scalar = require('./Scalar');
 
 module.exports = Line;
 
+/**
+ * Container for line-related functions
+ * @class Line
+ */
 function Line(){};
 
-// Line is defined as an array of two points!
+/**
+ * Compute the intersection between two lines.
+ * @static
+ * @method lineInt
+ * @param  {Array}  l1          Line vector 1
+ * @param  {Array}  l2          Line vector 2
+ * @param  {Number} precision   Precision to use when checking if the lines are parallel
+ * @return {Array}              The intersection point.
+ */
 Line.lineInt = function(l1,l2,precision){
     precision = precision || 0;
     var i = [0,0]; // point
@@ -24,7 +36,8 @@ Line.lineInt = function(l1,l2,precision){
 };
 
 /**
- * Calculates the intersection between two line segments.
+ * Checks if two line segments intersects.
+ * @method segmentsIntersect
  * @param {Array} p1 The start vertex of the first line segment.
  * @param {Array} p2 The end vertex of the first line segment.
  * @param {Array} q1 The start vertex of the second line segment.

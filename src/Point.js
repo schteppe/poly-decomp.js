@@ -1,22 +1,27 @@
 module.exports = Point;
 
-function Point(){
+/**
+ * Point related functions
+ * @class Point
+ */
+function Point(){};
 
-};
-
+/**
+ * Get the area of a triangle spanned by the three given points. Note that the area will be negative if the points are not given in counter-clockwise order.
+ * @static
+ * @method area
+ * @param  {Array} a
+ * @param  {Array} b
+ * @param  {Array} c
+ * @return {Number}
+ */
 Point.area = function(a,b,c){
     return (((b[0] - a[0])*(c[1] - a[1]))-((c[0] - a[0])*(b[1] - a[1])));
 };
-/*Scalar area(const Point &a, const Point &b, const Point &c) {
-    return (((b.x - a.x)*(c.y - a.y))-((c.x - a.x)*(b.y - a.y)));
-}*/
 
 Point.left = function(a,b,c){
     return Point.area(a,b,c) > 0;
 };
-/*bool left(const Point &a, const Point &b, const Point &c) {
-    return area(a, b, c) > 0;
-}*/
 
 Point.leftOn = function(a,b,c) {
     return Point.area(a, b, c) >= 0;
@@ -39,8 +44,3 @@ Point.sqdist = function(a,b){
     var dy = b[1] - a[1];
     return dx * dx + dy * dy;
 };
-/*Scalar sqdist(const Point &a, const Point &b) {
-    Scalar dx = b.x - a.x;
-    Scalar dy = b.y - a.y;
-    return dx * dx + dy * dy;
-}*/
