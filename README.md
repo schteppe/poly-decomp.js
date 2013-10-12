@@ -23,4 +23,6 @@ var convexes1 = concave.quickDecomp();
 
 // Decompose using the slow (but optimal) algorithm
 var convexes2 = concave.decomp();
+
+// convexes1 and convexes2 are now arrays of Polygon objects.
 ```

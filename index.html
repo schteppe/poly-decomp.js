@@ -2,26 +2,32 @@
 <html>
 <head>
 <style>
+    * {
+        margin:0;
+        padding:0;
+    }
     body {
         margin: 0px;
         padding: 0px;
         overflow: hidden;
         font: 13px Helvetica, arial, freesans, clean, sans-serif;
     }
-    canvas {
-        position:absolute;
-        top:0;
-        left:0;
-    }
     p, h1 {
-        margin:10px;
+        margin-bottom: 5px;
+    }
+    #info {
+        display: block;
+        background-color:#eee;
+        padding:10px;
     }
 </style>
 </head>
 <body>
-    <h1>poly-decomp.js</h1>
-    <p>Decomposition of 2D polygons into convex pieces in JavaScript.</p>
-    <p>Try drawing a polygon!</p>
+    <div id="info">
+        <h1><a href="https://github.com/schteppe/poly-decomp.js">poly-decomp.js</a></h1>
+        <p>Decomposition of 2D polygons into convex pieces in JavaScript.</p>
+        <p>Try drawing a polygon below!</p>
+    </div>
 
     <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
     <script src="build/decomp.js"></script>
@@ -35,7 +41,7 @@
     var canvas = document.createElement('canvas');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    document.body.appendChild(canvas);
+    $("body").append(canvas);
 
     function render() {
         var c = canvas.getContext('2d');
@@ -102,8 +108,8 @@
     gui.add(settings, 'quickDecomp');
 
     function getMousePos(e){
-        var offset = $("canvas").offset();
-        return [e.clientX + offset.left,e.clientY + offset.top];
+        var offset = $(e.target).offset();
+        return [e.clientX - offset.left,e.clientY - offset.top];
     }
 
     $("canvas").mousedown(function(e){
@@ -113,10 +119,14 @@
         mousedown = true;
         render();
     }).mousemove(function(e){
-        var point = getMousePos(e);
-        if(mousedown && decomp.Point.sqdist(point,path[path.length-1])>settings.minEdgeLength*settings.minEdgeLength){
-            path.push(point);
-            render();
+        if(mousedown){
+            var point = getMousePos(e),
+                lengthSquared = decomp.Point.sqdist(point,path[path.length-1]);
+                minLengthSquared = settings.minEdgeLength*settings.minEdgeLength;
+            if(lengthSquared > minLengthSquared){
+                path.push(point);
+                render();
+            }
         }
     }).mouseup(function(e){
         mousedown = false;
