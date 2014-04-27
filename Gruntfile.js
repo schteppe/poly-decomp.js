@@ -7,8 +7,10 @@ module.exports = function(grunt) {
             decomp : {
                 src : ["src/index.js"],
                 dest : 'build/decomp.js',
-                options : {
-                    standalone : "decomp"
+                options:{
+                    bundleOptions : {
+                        standalone : "decomp"
+                    }
                 }
             }
         },
