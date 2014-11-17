@@ -24,11 +24,11 @@
         "type" : "MIT"
     }],
     "devDependencies" : {
-    },
-    "dependencies" : {
         "grunt": "~0.4.0",
         "grunt-contrib-uglify": "~0.4.0",
         "grunt-browserify":"~2.0.8",
         "browserify" : "~3.44.2"
+    },
+    "dependencies" : {
     }
 }
