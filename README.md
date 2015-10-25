@@ -1,9 +1,16 @@
-poly-decomp.js
+@psalaets/poly-decomp
 ==============
 
 Library for decomposing 2D polygons into convex regions.
 
 [Demo](http://schteppe.github.io/poly-decomp.js/) - [Documentation](http://schteppe.github.io/poly-decomp.js/docs)
+
+### Differences from poly-decomp
+
+This module differs from [poly-decomp](https://www.npmjs.com/package/poly-decomp) in the following ways
+
+- there is nothing in `dependencies`
+- grunt has been replaced by npm scripts (`npm run build`)
 
 ### About
 
