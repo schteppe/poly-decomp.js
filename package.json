@@ -1,5 +1,5 @@
 {
-  "name": "poly-decomp",
+  "name": "@psalaets/poly-decomp",
   "version": "0.1.0",
   "description": "Convex decomposition in 2D",
   "author": "Stefan Hedman <schteppe@gmail.com> (http://steffe.se)",

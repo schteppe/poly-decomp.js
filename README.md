@@ -20,6 +20,8 @@ It implements two algorithms, one optimal (but slow) and one less optimal (but f
 
 ### Usage
 ```js
+var decomp = require('@psalaets/poly-decomp');
+
 // Create a concave polygon
 var concave = new decomp.Polygon();
 concave.vertices.push([ -1,   1],
@@ -44,22 +46,9 @@ Download [decomp.js](build/decomp.js) and include the script in your HTML:
 <script src="decomp.js" type="text/javascript"></script>
 ```
 ##### Node.js
-Until the code gets somewhat more stable, use the git url to install:
-```
-npm install git://github.com/schteppe/poly-decomp.js
-```
-Or add the dependency to your ```package.json```:
-```
-    ...
-    "dependencies" : {
-        "poly-decomp" : "git://github.com/schteppe/poly-decomp.js"
-    }
-    ...
-```
-Then require it like so:
-```js
-var decomp = require('poly-decomp');
-```
+
+`npm install @psalaets/poly-decomp -S`
+
 
 ### Change log
 ##### 0.1
