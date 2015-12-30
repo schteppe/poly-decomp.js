@@ -75,10 +75,10 @@
             c.fillStyle = colors[i%(colors.length)];
             var poly = polys[i];
             c.beginPath();
-            var p = poly.vertices[0];
+            var p = poly[0];
             c.moveTo(p[0],p[1]);
-            for(var j=0; j<poly.vertices.length; j++){
-                var p = poly.vertices[j];
+            for(var j=0; j<poly.length; j++){
+                var p = poly[j];
                 c.lineTo(p[0],p[1]);
             }
             c.closePath();
@@ -89,8 +89,8 @@
         c.fillStyle = "black";
         for(var i=0; i<polys.length; i++){
             var poly = polys[i];
-            for(var j=0; j<poly.vertices.length; j++){
-                var p = poly.vertices[j];
+            for(var j=0; j<poly.length; j++){
+                var p = poly[j];
                 c.beginPath();
                 c.arc(p[0],p[1],1,0,2*Math.PI);
                 c.fill();
@@ -117,6 +117,12 @@
         return [e.clientX - offset.left,e.clientY - offset.top];
     }
 
+    function sqdist(a,b){
+        var dx = b[0] - a[0];
+        var dy = b[1] - a[1];
+        return dx * dx + dy * dy;
+    }
+
     $("canvas").mousedown(function(e){
         path = [];
         polys = [];
@@ -126,7 +132,7 @@
     }).mousemove(function(e){
         if(mousedown){
             var point = getMousePos(e),
-                lengthSquared = decomp.Point.sqdist(point,path[path.length-1]);
+                lengthSquared = sqdist(point,path[path.length-1]);
                 minLengthSquared = settings.minEdgeLength*settings.minEdgeLength;
             if(lengthSquared > minLengthSquared){
                 path.push(point);
@@ -136,23 +142,21 @@
     }).mouseup(function(e){
         mousedown = false;
         if(path.length > 3){
-            var p = new decomp.Polygon();
-            p.vertices = path;
-            if(p.isSimple()){
-
+            var p = path;
+            if(decomp.isSimple(p)){
                 console.log("Making the polygon CCW...");
-                p.makeCCW();
+                decomp.makeCCW(p);
 
                 if(settings.removeCollinear){
                     console.log("Removing collinear points...");
-                    p.removeCollinearPoints(settings.collinearThreshold);
+                    decomp.removeCollinearPoints(p, settings.collinearThreshold);
                 }
 
                 console.log("Decomposing polygon of size "+path.length+"...");
                 if(settings.quickDecomp)
-                    polys = p.quickDecomp();
+                    polys = decomp.quickDecomp(p);
                 else
-                    polys = p.decomp();
+                    polys = decomp.decomp(p);
                 console.log("Got "+polys.length+" slices. Done.");
 
             } else {
