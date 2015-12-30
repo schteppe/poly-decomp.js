@@ -3,7 +3,7 @@ poly-decomp.js
 
 Library for decomposing 2D polygons into convex regions.
 
-[Demo](http://schteppe.github.io/poly-decomp.js/) - [Documentation](http://schteppe.github.io/poly-decomp.js/docs)
+[Demo](http://schteppe.github.io/poly-decomp.js/)
 
 ### About
 
@@ -11,45 +11,70 @@ The library is a manual port of the C++ library [Poly Decomp](http://mnbayazit.c
 
 It implements two algorithms, one optimal (but slow) and one less optimal (but fast).
 
-### Usage
+### Basic usage
 ```js
 // Create a concave polygon
-var concave = new decomp.Polygon();
-concave.vertices.push([ -1,   1],
-                      [ -1,   0],
-                      [  1,   0],
-                      [  1,   1],
-                      [0.5, 0.5]);
+var concave = [
+  [ -1,   1],
+  [ -1,   0],
+  [  1,   0],
+  [  1,   1],
+  [0.5, 0.5]
+];
 
 // Decompose into convex polygons, using the faster algorithm
-var convexes1 = concave.quickDecomp();
+decomp.quickDecomp(concave);
+
+// ==> [[[1,0],[1,1],[0.5,0.5]],[[0.5,0.5],[-1,1],[-1,0],[1,0]]]
 
 // Decompose using the slow (but optimal) algorithm
-var convexes2 = concave.decomp();
+decomp.decomp(concave);
 
-// convexes1 and convexes2 are now arrays of Polygon objects.
+// ==> [[[-1,1],[-1,0],[1,0],[0.5,0.5]],[[1,0],[1,1],[0.5,0.5]]]
 ```
+
+### Documentation
+
+#### quickDecomp(polygon) => array of polygons
+
+Decomposes the polygon into convex sub-polygons, using a fast algorithm.
+
+#### decomp(polygon) => array of polygons
+
+Decomposes the polygon into one or more convex sub-polygons using an optimal algorithm.
+
+#### isSimple(polygon) => boolean
+
+Returns true if any of the line segments in the polygon intersects. Use this to check if the input polygon is OK to decompose.
+
+#### makeCCW(polygon)
+
+Reverses the polygon, if its vertices are not ordered counter-clockwise.
+
+#### removeCollinearPoints(polygon, thresholdAngle)
+
+Removes collinear points in the polygon. This means that if three points are placed along the same line, the middle one will be removed.
+
+The ```thresholdAngle``` determines whether the points are collinear or not.
 
 ### Install
 ##### Browser
-Download [decomp.js](build/decomp.js) and include the script in your HTML:
+Download [decomp.js](build/decomp.js) or [decomp.min.js](build/decomp.min.js) and include the script in your HTML:
 ```html
 <script src="decomp.js" type="text/javascript"></script>
+<!-- or: -->
+<script src="decomp.min.js" type="text/javascript"></script>
 ```
+
+Then you can use the ```decomp``` global.
+
 ##### Node.js
-Until the code gets somewhat more stable, use the git url to install:
 ```
-npm install git://github.com/schteppe/poly-decomp.js
+npm install poly-decomp
 ```
-Or add the dependency to your ```package.json```:
-```
-    ...
-    "dependencies" : {
-        "poly-decomp" : "git://github.com/schteppe/poly-decomp.js"
-    }
-    ...
-```
+
 Then require it like so:
+
 ```js
 var decomp = require('poly-decomp');
 ```
