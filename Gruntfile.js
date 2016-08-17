@@ -21,11 +21,15 @@ module.exports = function(grunt) {
                 dest : 'build/decomp.min.js'
             }
         },
+        nodeunit: {
+            all: ['test/**/*.js'],
+        }
     });
 
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-nodeunit');
 
-    grunt.registerTask('default', ['browserify','uglify']);
+    grunt.registerTask('default', ['nodeunit', 'browserify','uglify']);
 
 };
