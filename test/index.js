@@ -15,35 +15,39 @@ for(var i=0; i<N; i++){
     circle.push([Math.cos(angle),Math.sin(angle)]);
 }
 
-exports.decomp = function(test){
-    var circleConvexes = polyDecomp.decomp(circle);
-    test.equal(circleConvexes.length, 1);
-    var concaveConvexes = polyDecomp.decomp(concave);
-    test.equal(concaveConvexes.length, 2);
-    test.done();
-};
+module.exports = {
 
-exports.isSimple = function(test){
-    var notSimple = [
-        [-1,-1],
-        [ 0, 0],
-        [ 1, 1],
-        [ 0, 2],
-        [-1, 1],
-        [ 0, 0],
-        [ 1,-1]
-    ];
+    decomp: function(test){
+        var circleConvexes = polyDecomp.decomp(circle);
+        test.equal(circleConvexes.length, 1);
+        var concaveConvexes = polyDecomp.decomp(concave);
+        test.equal(concaveConvexes.length, 2);
+        test.done();
+    },
 
-    test.ok(polyDecomp.isSimple(concave));
-    test.ok(polyDecomp.isSimple(circle));
-    test.ok(!polyDecomp.isSimple(notSimple));
-    test.done();
-};
+    isSimple: function(test){
+        var notSimple = [
+            [-1,-1],
+            [ 0, 0],
+            [ 1, 1],
+            [ 0, 2],
+            [-1, 1],
+            [ 0, 0],
+            [ 1,-1]
+        ];
 
-exports.quickDecomp = function(test){
-    var result = polyDecomp.quickDecomp(circle);
-    test.equal(result.length, 1);
-    var convexResult = polyDecomp.quickDecomp(concave);
-    test.equal(convexResult.length, 2);
-    test.done();
+        test.ok(polyDecomp.isSimple(concave));
+        test.ok(polyDecomp.isSimple(circle));
+        test.ok(!polyDecomp.isSimple(notSimple));
+        test.done();
+    },
+
+    quickDecomp: function(test){
+        var result = polyDecomp.quickDecomp(circle);
+        test.equal(result.length, 1);
+        var convexResult = polyDecomp.quickDecomp(concave);
+        test.equal(convexResult.length, 2);
+        test.done();
+    }
+
 };
