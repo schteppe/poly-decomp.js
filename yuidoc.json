@@ -1,9 +1,0 @@
-{
-    "name": "poly-decomp.js",
-    "description": "2D polygon decomposition",
-    "version": "0.1.0",
-    "options": {
-        "outdir" : "docs",
-        "paths" : ["./src/"]
-    }
-}

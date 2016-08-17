@@ -21,6 +21,7 @@ module.exports = function(grunt) {
                 dest : 'build/decomp.min.js'
             }
         },
+
         nodeunit: {
             all: ['test/**/*.js'],
         }
