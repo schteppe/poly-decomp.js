@@ -1,34 +1,35 @@
 {
-    "name": "poly-decomp",
-    "version": "0.1.1",
-    "description": "Convex decomposition in 2D",
-    "author": "Stefan Hedman <schteppe@gmail.com> (http://steffe.se)",
-    "keywords": [
-        "convex",
-        "decomposition",
-        "polygon",
-        "2d"
-    ],
-    "engines": {
-        "node": "*"
-    },
-    "main": "./src/index.js",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/schteppe/poly-decomp.js.git"
-    },
-    "bugs": {
-        "url": "https://github.com/schteppe/poly-decomp.js/issues"
-    },
-    "licenses" : [{
-        "type" : "MIT"
-    }],
-    "dependencies" : {
-    },
-    "devDependencies" : {
-        "grunt": "~0.4.0",
-        "grunt-contrib-uglify": "~0.4.0",
-        "grunt-browserify":"~2.0.8",
-        "browserify" : "~3.44.2"
+  "name": "poly-decomp",
+  "version": "1.0.0",
+  "description": "Convex decomposition for 2D polygons",
+  "author": "Stefan Hedman <schteppe@gmail.com> (http://steffe.se)",
+  "keywords": [
+    "convex",
+    "decomposition",
+    "polygon",
+    "2d"
+  ],
+  "engines": {
+    "node": "*"
+  },
+  "main": "./src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/schteppe/poly-decomp.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/schteppe/poly-decomp.js/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT"
     }
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "browserify": "^3.44.2",
+    "grunt": "^1.0.1",
+    "grunt-browserify": "^2.0.8",
+    "grunt-contrib-uglify": "^0.4.1"
+  }
 }
