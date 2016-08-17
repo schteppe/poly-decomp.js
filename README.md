@@ -14,7 +14,7 @@ It implements two algorithms, one optimal (but slow) and one less optimal (but f
 ### Basic usage
 ```js
 // Create a concave polygon
-var concave = [
+var concavePolygon = [
   [ -1,   1],
   [ -1,   0],
   [  1,   0],
@@ -23,39 +23,37 @@ var concave = [
 ];
 
 // Decompose into convex polygons, using the faster algorithm
-decomp.quickDecomp(concave);
+var convexPolygons = decomp.quickDecomp(concavePolygon);
 
-// ==> [[[1,0],[1,1],[0.5,0.5]],[[0.5,0.5],[-1,1],[-1,0],[1,0]]]
+// ==> [  [[1,0],[1,1],[0.5,0.5]],  [[0.5,0.5],[-1,1],[-1,0],[1,0]]  ]
 
 // Decompose using the slow (but optimal) algorithm
-decomp.decomp(concave);
+var convexPolygons = decomp.decomp(concavePolygon);
 
-// ==> [[[-1,1],[-1,0],[1,0],[0.5,0.5]],[[1,0],[1,1],[0.5,0.5]]]
+// ==> [  [[-1,1],[-1,0],[1,0],[0.5,0.5]],  [[1,0],[1,1],[0.5,0.5]]  ]
 ```
 
 ### Documentation
 
-#### quickDecomp(polygon) => array of polygons
+#### var convexPolygons = decomp.quickDecomp(polygon);
 
-Decomposes the polygon into convex sub-polygons, using a fast algorithm.
+Slices the polygon into convex sub-polygons, using a fast algorithm. Note that the input points objects will be re-used in the result array.
 
-#### decomp(polygon) => array of polygons
+#### var convexPolygons = decomp.decomp(polygon);
 
-Decomposes the polygon into one or more convex sub-polygons using an optimal algorithm.
+Decomposes the polygon into one or more convex sub-polygons using an optimal algorithm. Note that the input points objects will be re-used in the result array.
 
-#### isSimple(polygon) => boolean
+#### var polygonIsSimple = decomp.isSimple(polygon);
 
 Returns true if any of the line segments in the polygon intersects. Use this to check if the input polygon is OK to decompose.
 
-#### makeCCW(polygon)
+#### makeCCW(polygon);
 
-Reverses the polygon, if its vertices are not ordered counter-clockwise.
+Reverses the polygon, if its vertices are not ordered counter-clockwise. Note that the input polygon array will be modified in place.
 
-#### removeCollinearPoints(polygon, thresholdAngle)
+#### decomp.removeCollinearPoints(polygon, thresholdAngle);
 
-Removes collinear points in the polygon. This means that if three points are placed along the same line, the middle one will be removed.
-
-The ```thresholdAngle``` determines whether the points are collinear or not.
+Removes collinear points in the polygon. This means that if three points are placed along the same line, the middle one will be removed. The ```thresholdAngle``` is measured in radians and determines whether the points are collinear or not. Note that the input array will be modified in place.
 
 ### Install
 ##### Browser
