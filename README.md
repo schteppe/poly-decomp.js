@@ -3,7 +3,7 @@ poly-decomp.js
 
 Library for decomposing 2D polygons into convex regions.
 
-[Demo](http://schteppe.github.io/poly-decomp.js/)
+[Launch the demo!](http://schteppe.github.io/poly-decomp.js/)
 
 ### About
 
@@ -35,23 +35,51 @@ var convexPolygons = decomp.decomp(concavePolygon);
 
 ### Documentation
 
-#### var convexPolygons = decomp.quickDecomp(polygon);
+#### quickDecomp(polygon: Array&lt;Point&gt;): Array&lt;Array&lt;Point&gt;&gt;
+
+```js
+var convexPolygons = decomp.quickDecomp(polygon);
+```
 
 Slices the polygon into convex sub-polygons, using a fast algorithm. Note that the input points objects will be re-used in the result array.
 
-#### var convexPolygons = decomp.decomp(polygon);
+#### decomp(polygon: Array&lt;Point&gt;): Array&lt;Array&lt;Point&gt;&gt;
+
+```js
+var convexPolygons = decomp.quickDecomp(polygon);
+```
 
 Decomposes the polygon into one or more convex sub-polygons using an optimal algorithm. Note that the input points objects will be re-used in the result array.
 
-#### var polygonIsSimple = decomp.isSimple(polygon);
+#### isSimple(polygon: Array&lt;Point&gt;): boolean
+
+```js
+if(decomp.isSimple(polygon)){
+    // Polygon does not self-intersect - it's safe to decompose.
+    var convexPolygons = decomp.quickDecomp(polygon);
+}
+```
 
 Returns true if any of the line segments in the polygon intersects. Use this to check if the input polygon is OK to decompose.
 
-#### makeCCW(polygon);
+#### makeCCW(polygon: Array&lt;Point&gt;): void
+
+```js
+console.log('Polygon with clockwise winding:', polygon);
+decomp.makeCCW(polygon);
+console.log('Polygon with counter-clockwise winding:', polygon);
+```
 
 Reverses the polygon, if its vertices are not ordered counter-clockwise. Note that the input polygon array will be modified in place.
 
-#### decomp.removeCollinearPoints(polygon, thresholdAngle);
+#### removeCollinearPoints(polygon: Array&lt;Point&gt;, thresholdAngle: number): void
+
+```js
+var before = polygon.length;
+decomp.removeCollinearPoints(polygon, 0.1);
+var numRemoved = before - polygon.length;
+console.log(numRemoved + ' collinear points could be removed');
+```
 
 Removes collinear points in the polygon. This means that if three points are placed along the same line, the middle one will be removed. The ```thresholdAngle``` is measured in radians and determines whether the points are collinear or not. Note that the input array will be modified in place.
 
