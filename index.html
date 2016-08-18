@@ -152,7 +152,7 @@
                     decomp.removeCollinearPoints(p, settings.collinearThreshold);
                 }
 
-                console.log("Decomposing polygon of size "+path.length+"...");
+                console.log("Decomposing polygon of size "+p.length+"...");
                 if(settings.quickDecomp)
                     polys = decomp.quickDecomp(p);
                 else
