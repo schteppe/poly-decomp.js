@@ -33,6 +33,40 @@ var convexPolygons = decomp.decomp(concavePolygon);
 // ==> [  [[-1,1],[-1,0],[1,0],[0.5,0.5]],  [[1,0],[1,1],[0.5,0.5]]  ]
 ```
 
+### Advanced usage
+```js
+// Get user input as an array of points.
+var polygon = getUserInput();
+
+// Check if the polygon self-intersects
+if(decomp.isSimple(polygon)){
+    
+    // Reverse the polygon to make sure it uses counter-clockwise winding
+    decomp.makeCCW(polygon);
+    
+    // Decompose into convex pieces
+    var convexPolygons = decomp.quickDecomp(polygon);
+    
+    // Draw each point in each on a HTML5 Canvas context
+    for(var i=0; i<convexPolygons.length; i++){
+        var convexPolygon = convexPolygons[i];
+        
+        ctx.beginPath();
+        var firstPoint = convexPolygon[0];
+        ctx.moveTo(firstPoint[0], firstPoint[1]);
+        
+        for(var j=1; j<convexPolygon.length; j++){
+            var point = convexPolygon[j];
+            var x = point[0];
+            var y = point[1];
+            c.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.fill();
+    }
+}
+```
+
 ### Documentation
 
 #### quickDecomp(polygon: Array&lt;Point&gt;): Array&lt;Array&lt;Point&gt;&gt;
