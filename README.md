@@ -5,11 +5,27 @@ Library for decomposing 2D polygons into convex regions.
 
 [Launch the demo!](http://schteppe.github.io/poly-decomp.js/)
 
-### About
+### Install
+##### Browser
+Download [decomp.js](build/decomp.js) or [decomp.min.js](build/decomp.min.js) and include the script in your HTML:
+```html
+<script src="decomp.js" type="text/javascript"></script>
+<!-- or: -->
+<script src="decomp.min.js" type="text/javascript"></script>
+```
 
-The library is a manual port of the C++ library [Poly Decomp](http://mnbayazit.com/406/overview) by [Mark Bayazit](http://mnbayazit.com/).
+Then you can use the ```decomp``` global.
 
-It implements two algorithms, one optimal (but slow) and one less optimal (but fast).
+##### Node.js
+```
+npm install poly-decomp
+```
+
+Then require it like so:
+
+```js
+var decomp = require('poly-decomp');
+```
 
 ### Basic usage
 ```js
@@ -117,28 +133,6 @@ console.log(numRemoved + ' collinear points could be removed');
 
 Removes collinear points in the polygon. This means that if three points are placed along the same line, the middle one will be removed. The ```thresholdAngle``` is measured in radians and determines whether the points are collinear or not. Note that the input array will be modified in place.
 
-### Install
-##### Browser
-Download [decomp.js](build/decomp.js) or [decomp.min.js](build/decomp.min.js) and include the script in your HTML:
-```html
-<script src="decomp.js" type="text/javascript"></script>
-<!-- or: -->
-<script src="decomp.min.js" type="text/javascript"></script>
-```
-
-Then you can use the ```decomp``` global.
-
-##### Node.js
-```
-npm install poly-decomp
-```
-
-Then require it like so:
-
-```js
-var decomp = require('poly-decomp');
-```
-
 ### Change log
 ##### 0.1
 * Added method ```Polygon.prototype.removeCollinearPoints```.
@@ -154,3 +148,9 @@ npm install;                                     # Install dependencies
 grunt;                                           # Builds build/decomp.js
 ```
 The most recent commits are currently pushed to the ```master``` branch. Thanks for contributing!
+
+### About
+
+The library is a manual port of the C++ library [Poly Decomp](http://mnbayazit.com/406/overview) by [Mark Bayazit](http://mnbayazit.com/).
+
+It implements two algorithms, one optimal (but slow) and one less optimal (but fast).
