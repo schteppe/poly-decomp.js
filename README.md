@@ -63,7 +63,7 @@ if(decomp.isSimple(polygon)){
     // Decompose into convex pieces
     var convexPolygons = decomp.quickDecomp(polygon);
     
-    // Draw each point in each on a HTML5 Canvas context
+    // Draw each point on an HTML5 Canvas context
     for(var i=0; i<convexPolygons.length; i++){
         var convexPolygon = convexPolygons[i];
         
