@@ -1,6 +1,6 @@
 {
   "name": "poly-decomp",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Convex decomposition for 2D polygons",
   "author": "Stefan Hedman <schteppe@gmail.com> (http://steffe.se)",
   "keywords": [

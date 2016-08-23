@@ -579,7 +579,6 @@ function polygonRemoveCollinearPoints(polygon, precision){
         if(collinear(polygonAt(polygon, i-1),polygonAt(polygon, i),polygonAt(polygon, i+1),precision)){
             // Remove the middle point
             polygon.splice(i%polygon.length,1);
-            i--; // Jump one point forward. Otherwise we may get a chain removal
             num++;
         }
     }
