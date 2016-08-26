@@ -5,6 +5,8 @@ Library for decomposing 2D polygons into convex regions.
 
 [Launch the demo!](http://schteppe.github.io/poly-decomp.js/)
 
+![Decomposing a convcave polygon into convex regions](https://cloud.githubusercontent.com/assets/1063152/18008563/edccfe86-6ba8-11e6-9e20-a090c1812c95.gif)
+
 ### Install
 ##### Browser
 Download [decomp.js](build/decomp.js) or [decomp.min.js](build/decomp.min.js) and include the script in your HTML:
