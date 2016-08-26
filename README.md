@@ -136,6 +136,9 @@ console.log(numRemoved + ' collinear points could be removed');
 Removes collinear points in the polygon. This means that if three points are placed along the same line, the middle one will be removed. The ```thresholdAngle``` is measured in radians and determines whether the points are collinear or not. Note that the input array will be modified in place.
 
 ### Change log
+##### 0.2.1
+* Fixed bug in the collinear point removal, after this fix the algorithm is more agressive and more correct.
+
 ##### 0.2.0
 * Rewrote the class based API to a minimal array-based one. See docs.
 
