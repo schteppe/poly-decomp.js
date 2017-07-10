@@ -4,7 +4,8 @@ module.exports = {
     isSimple: polygonIsSimple,
     removeCollinearPoints: polygonRemoveCollinearPoints,
     removeDuplicatePoints: polygonRemoveDuplicatePoints,
-    makeCCW: polygonMakeCCW
+    makeCCW: polygonMakeCCW,
+    lineSegmentsIntersect: lineSegmentsIntersect
 };
 
 /**
