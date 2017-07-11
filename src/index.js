@@ -472,7 +472,7 @@ function polygonQuickDecomp(polygon, result,reflexVertices,steinerPoints,delta,m
 
     level++;
     if(level > maxlevel){
-        console.warn("quickDecomp: max level ("+maxlevel+") reached.");
+        //console.warn("quickDecomp: max level ("+maxlevel+") reached.");
         return result;
     }
 
