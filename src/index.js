@@ -527,7 +527,7 @@ function polygonQuickDecomp(polygon, result,reflexVertices,steinerPoints,delta,m
                 for (var j = lowerIndex; j <= upperIndex; ++j) {
                     if (isLeftOn(polygonAt(poly, i - 1), polygonAt(poly, i), polygonAt(poly, j)) && isRightOn(polygonAt(poly, i + 1), polygonAt(poly, i), polygonAt(poly, j))) {
                         d = sqdist(polygonAt(poly, i), polygonAt(poly, j));
-                        if (d < closestDist) {
+                        if (d < closestDist && (Math.abs(i-j)<=2 || polygonCanSee(poly, i, j))) {
                             closestDist = d;
                             closestIndex = j % polygon.length;
                         }

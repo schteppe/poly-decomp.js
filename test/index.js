@@ -48,6 +48,39 @@ module.exports = {
         var convexResult = polyDecomp.quickDecomp(concave);
         test.equal(convexResult.length, 2);
         test.done();
-    }
+    },
 
+    quickDecompExtraVisibilityTestFix: function(test){
+        // This test checks that this bug is fixed: https://github.com/schteppe/poly-decomp.js/issues/8
+        var path = [
+            [0,-134],
+            [50,-139],
+            [60,-215],
+            [70,-6],
+            [80,-236],
+            [110,-120],
+            [110,0],
+            [0,0]
+        ].map((point)=>[2*point[0]+100,1*point[1]+500]);
+        polyDecomp.makeCCW(path);
+        var polys = polyDecomp.quickDecomp(path);
+        test.equal(polys.length, 3);
+
+        var path = [
+            [0,-134],
+            [50,-139],
+            [60,-215],
+            [70,-6],
+            [80,-236],
+            [110,-120],
+            [110,0],
+            [0,0]
+        ].map((point)=>[3*point[0]+100,1*point[1]+500]);
+        polyDecomp.makeCCW(path);
+        var polys = polyDecomp.quickDecomp(path);
+        test.equal(polys.length, 3);
+
+        test.done();
+    }
+    
 };
