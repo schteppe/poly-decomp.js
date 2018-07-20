@@ -40,6 +40,9 @@ var concavePolygon = [
   [0.5, 0.5]
 ];
 
+// Make sure the polygon has counter-clockwise winding. Skip this step if you know it's already counter-clockwise.
+decomp.makeCCW(concavePolygon);
+
 // Decompose into convex polygons, using the faster algorithm
 var convexPolygons = decomp.quickDecomp(concavePolygon);
 
