@@ -415,6 +415,12 @@ function getIntersectionPoint(p1, p2, q1, q2, delta){
     }
 }
 
+function indexDistance(i,j,max){
+    var diff = Math.abs(j - i) % max; // This is either the distance or max - distance
+    var distance = diff > max/2 ? max - diff : diff;
+    return distance;
+}
+
 /**
  * Quickly decompose the Polygon into convex sub-polygons.
  * @method quickDecomp
@@ -528,7 +534,7 @@ function polygonQuickDecomp(polygon, result,reflexVertices,steinerPoints,delta,m
                 for (var j = lowerIndex; j <= upperIndex; ++j) {
                     if (isLeftOn(polygonAt(poly, i - 1), polygonAt(poly, i), polygonAt(poly, j)) && isRightOn(polygonAt(poly, i + 1), polygonAt(poly, i), polygonAt(poly, j))) {
                         d = sqdist(polygonAt(poly, i), polygonAt(poly, j));
-                        if (d < closestDist && (Math.abs(i-j)<=2 || polygonCanSee(poly, i, j))) {
+                        if (d < closestDist && (indexDistance(i,j,poly.length)<=2 || polygonCanSee(poly, i, j))) {
                             closestDist = d;
                             closestIndex = j % polygon.length;
                         }

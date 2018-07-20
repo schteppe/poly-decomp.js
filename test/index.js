@@ -90,7 +90,7 @@ module.exports = {
         var polys = polyDecomp.quickDecomp(path);
         test.equal(polys.length, 3);
 
-        var path = [
+        path = [
             [0,-134],
             [50,-139],
             [60,-215],
@@ -100,6 +100,20 @@ module.exports = {
             [110,0],
             [0,0]
         ].map((point)=>[3*point[0]+100,1*point[1]+500]);
+        polyDecomp.makeCCW(path);
+        var polys = polyDecomp.quickDecomp(path);
+        test.equal(polys.length, 3);
+
+        path = [
+            [0,-134],
+            [50,-139],
+            [60,-215],
+            [70,-6],
+            [80,-236],
+            [110,-120],
+            [110,0],
+            [0,0]
+        ].map((point)=>[-3*point[0],-point[1]]);
         polyDecomp.makeCCW(path);
         var polys = polyDecomp.quickDecomp(path);
         test.equal(polys.length, 3);
