@@ -3,6 +3,7 @@ module.exports = {
     quickDecomp: polygonQuickDecomp,
     isSimple: polygonIsSimple,
     removeCollinearPoints: polygonRemoveCollinearPoints,
+    removeDuplicatePoints: polygonRemoveDuplicatePoints,
     makeCCW: polygonMakeCCW
 };
 
@@ -585,6 +586,23 @@ function polygonRemoveCollinearPoints(polygon, precision){
 }
 
 /**
+ * Remove duplicate points in the polygon.
+ * @method removeDuplicatePoints
+ * @param  {Number} [precision] The threshold to use when determining whether two points are the same. Use zero for best precision.
+ */
+function polygonRemoveDuplicatePoints(polygon, precision){
+    for(var i=polygon.length-1; i>=1; --i){
+        var pi = polygon[i];
+        for(var j=i-1; j>=0; --j){
+            if(points_eq(pi, polygon[j], precision)){
+                polygon.splice(i,1);
+                continue;
+            }
+        }
+    }
+}
+
+/**
  * Check if two scalars are equal
  * @static
  * @method eq
@@ -595,5 +613,18 @@ function polygonRemoveCollinearPoints(polygon, precision){
  */
 function scalar_eq(a,b,precision){
     precision = precision || 0;
-    return Math.abs(a-b) < precision;
+    return Math.abs(a-b) <= precision;
+}
+
+/**
+ * Check if two points are equal
+ * @static
+ * @method points_eq
+ * @param  {Array} a
+ * @param  {Array} b
+ * @param  {Number} [precision]
+ * @return {Boolean}
+ */
+function points_eq(a,b,precision){
+    return scalar_eq(a[0],b[0],precision) && scalar_eq(a[1],b[1],precision);
 }

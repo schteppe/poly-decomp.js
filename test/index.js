@@ -50,6 +50,30 @@ module.exports = {
         test.done();
     },
 
+    removeDuplicatePoints: function(test){
+         var data = [
+            [0,0],
+            [1,1],
+            [2,2],
+            [0,0]
+        ];
+        polyDecomp.removeDuplicatePoints(data);
+        test.equal(data.length, 3);
+
+        var data2 = [
+            [0,0],
+            [1,1],
+            [2,2],
+            [1,1],
+            [0,0],
+            [2,2]
+        ];
+        polyDecomp.removeDuplicatePoints(data2);
+        test.equal(data2.length, 3);
+
+        test.done();
+    },
+
     quickDecompExtraVisibilityTestFix: function(test){
         // This test checks that this bug is fixed: https://github.com/schteppe/poly-decomp.js/issues/8
         var path = [
