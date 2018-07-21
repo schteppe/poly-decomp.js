@@ -84,7 +84,7 @@
             c.fill();
         }
 
-        // Draw the convex decomp if it exists
+        // Draw convex polygons
         for(var i=0; i<polys.length; i++){
             c.fillStyle = colors[i%(colors.length)];
             var poly = polys[i];
@@ -97,6 +97,7 @@
             }
             c.closePath();
             c.fill();
+            c.stroke();
         }
 
         // Draw points
@@ -107,7 +108,7 @@
             for(var j=0; j<poly.length; j++){
                 var p = poly[j];
                 c.moveTo(p[0],p[1]);
-                c.arc(p[0],p[1],1,0,2*Math.PI);
+                c.arc(p[0],p[1],2,0,2*Math.PI);
             }
             c.fill();
         }
