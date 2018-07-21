@@ -118,6 +118,11 @@ module.exports = {
         var polys = polyDecomp.quickDecomp(path);
         test.equal(polys.length, 3);
 
+        path = [[331,384],[285,361],[238,386],[283,408],[191,469],[213,372],[298,314],[342,340]];
+        polyDecomp.makeCCW(path);
+        var polys = polyDecomp.quickDecomp(path);
+        test.equal(polys.length, 3);
+
         test.done();
     }
     

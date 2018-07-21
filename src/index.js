@@ -179,6 +179,9 @@ function polygonMakeCCW(polygon){
     // reverse poly if clockwise
     if (!isLeft(polygonAt(polygon, br - 1), polygonAt(polygon, br), polygonAt(polygon, br + 1))) {
         polygonReverse(polygon);
+        return true;
+    } else {
+        return false;
     }
 }
 
@@ -240,6 +243,27 @@ function polygonCanSee(polygon, a,b) {
         }
     }
 
+    return true;
+}
+
+/**
+ * Check if two vertices in the polygon can see each other
+ * @method canSee2
+ * @param  {Number} a Vertex index 1
+ * @param  {Number} b Vertex index 2
+ * @return {Boolean}
+ */
+function polygonCanSee2(polygon, a,b) {
+    // for each edge
+    for (var i = 0; i !== polygon.length; ++i) {
+        // ignore incident edges
+        if (i === a || i === b || (i + 1) % polygon.length === a || (i + 1) % polygon.length === b){
+            continue;
+        }
+        if( lineSegmentsIntersect(polygonAt(polygon, a), polygonAt(polygon, b), polygonAt(polygon, i), polygonAt(polygon, i+1)) ){
+            return false;
+        }
+    }
     return true;
 }
 
@@ -415,12 +439,6 @@ function getIntersectionPoint(p1, p2, q1, q2, delta){
     }
 }
 
-function indexDistance(i,j,max){
-    var diff = Math.abs(j - i) % max; // This is either the distance or max - distance
-    var distance = diff > max/2 ? max - diff : diff;
-    return distance;
-}
-
 /**
  * Quickly decompose the Polygon into convex sub-polygons.
  * @method quickDecomp
@@ -532,9 +550,12 @@ function polygonQuickDecomp(polygon, result,reflexVertices,steinerPoints,delta,m
                 }
 
                 for (var j = lowerIndex; j <= upperIndex; ++j) {
-                    if (isLeftOn(polygonAt(poly, i - 1), polygonAt(poly, i), polygonAt(poly, j)) && isRightOn(polygonAt(poly, i + 1), polygonAt(poly, i), polygonAt(poly, j))) {
+                    if (
+                        isLeftOn(polygonAt(poly, i - 1), polygonAt(poly, i), polygonAt(poly, j)) &&
+                        isRightOn(polygonAt(poly, i + 1), polygonAt(poly, i), polygonAt(poly, j))
+                    ) {
                         d = sqdist(polygonAt(poly, i), polygonAt(poly, j));
-                        if (d < closestDist && (indexDistance(i,j,poly.length)<=2 || polygonCanSee(poly, i, j))) {
+                        if (d < closestDist && polygonCanSee2(poly, i, j)) {
                             closestDist = d;
                             closestIndex = j % polygon.length;
                         }

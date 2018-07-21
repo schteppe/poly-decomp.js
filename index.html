@@ -48,6 +48,8 @@
     <script>
     var path = [],
         polys = [],
+        reflexVertices = [],
+        steinerPoints = [],
         mousedown = false,
         colors = ["#f99","#9f9","#99f","#ff9"];
 
@@ -66,15 +68,15 @@
         c.strokeStyle = "black";
 
         // draw the current path
-        if(mousedown){
-            c.beginPath();
-            for(var i=0; i<path.length-1; i++){
-                c.moveTo(path[i][0],path[i][1]);
-                c.lineTo(path[i+1][0],path[i+1][1]);
-            }
-            c.fill();
-            c.stroke();
+        c.beginPath();
+        for(var i=0; i<path.length-1; i++){
+            c.moveTo(path[i][0],path[i][1]);
+            c.lineTo(path[i+1][0],path[i+1][1]);
+        }
+        c.fill();
+        c.stroke();
 
+        if(mousedown){
             c.beginPath();
             for(var i=0; i<path.length-1; i++){
                 var p = path[i];
@@ -112,6 +114,36 @@
             }
             c.fill();
         }
+
+        if(!mousedown){
+            // Draw reflex vertices
+            c.fillStyle = "blue";
+            c.beginPath();
+            for(var j=0; j<reflexVertices.length; j++){
+                var p = reflexVertices[j];
+                c.moveTo(p[0],p[1]);
+                c.arc(p[0],p[1],4,0,2*Math.PI);
+            }
+            c.fill();
+
+            // Draw steiner points
+            c.fillStyle = "red";
+            c.beginPath();
+            for(var j=0; j<steinerPoints.length; j++){
+                var p = steinerPoints[j];
+                c.moveTo(p[0],p[1]);
+                c.arc(p[0],p[1],4,0,2*Math.PI);
+            }
+            c.fill();
+
+            // draw point indices
+            c.font = "10px Arial";
+            c.fillStyle = "black";
+            for(var i=0; i<path.length; i++){
+                var p = path[i];
+                c.fillText(i,p[0]+3,p[1]+3);
+            }
+        }
     }
     render();
 
@@ -140,8 +172,9 @@
     }
 
     canvas.addEventListener('mousedown', function(e){
-        path = [];
-        polys = [];
+        path.length = 0;
+        polys.length = 0;
+        reflexVertices.length = steinerPoints.length = 0;
         path.push(getMousePos(e));
         mousedown = true;
         render();
@@ -157,32 +190,42 @@
             }
         }
     });
-    canvas.addEventListener('mouseup', function(e){
-        mousedown = false;
-        if(path.length > 3){
-            var p = path;
-            if(decomp.isSimple(p)){
-                console.log("Making the polygon CCW...");
-                decomp.makeCCW(p);
 
+    function setPath(p){
+        mousedown = false;
+        polys.length=0;
+        reflexVertices.length = steinerPoints.length = 0;
+        path = p;
+        if(p.length > 3){
+            if(decomp.isSimple(p)){
+                if(decomp.makeCCW(p)){
+                    console.log("The polygon is not counter-clockwise. Reversing it...");
+                }
+                
                 if(settings.removeCollinear){
                     console.log("Removing collinear points...");
                     decomp.removeCollinearPoints(p, settings.collinearThreshold);
                 }
+                console.log("setPath(["+ p.map(function(point,i){
+                    return "[" + point.toString() + "/*" + i +"*/]";
+                }).join(",")+"])");
 
                 console.log("Decomposing polygon of size "+p.length+"...");
-                if(settings.quickDecomp)
-                    polys = decomp.quickDecomp(p);
-                else
+                if(settings.quickDecomp){
+                    decomp.quickDecomp(p,polys,reflexVertices,steinerPoints,25,100,0,p);
+                } else
                     polys = decomp.decomp(p);
-                console.log("Got "+polys.length+" slices. Done.");
+                console.log("Got "+polys.length+" convex polygons. Done.");
 
             } else {
                 console.log("The polygon was not simple. Aborting...");
             }
         }
-        path = [];
         render();
+    }
+
+    canvas.addEventListener('mouseup', function(e){
+        setPath(path);
     });
 
     </script>
