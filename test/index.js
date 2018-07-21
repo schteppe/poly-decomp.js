@@ -11,7 +11,7 @@ var concave = [
 var circle = [],
     N = 10;
 for(var i=0; i<N; i++){
-    var angle = Math.PI/N*i;
+    var angle = 2*Math.PI/N*i;
     circle.push([Math.cos(angle),Math.sin(angle)]);
 }
 
