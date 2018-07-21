@@ -46,6 +46,86 @@
     <script src="build/decomp.js"></script>
     <script src="dat.gui.js"></script>
     <script>
+    var demoPolygons = [
+        {
+            "name": "BayazitCase1",
+            "data": [
+                [192,40],
+                [32,48],
+                [78,154],
+                [118,108],
+                [160,150]
+            ]
+        },
+        {
+            "name": "BayazitCase2",
+            "data": [
+                [125,52],
+                [161,104],
+                [202,52],
+                [268,90],
+                [260,188],
+                [202,228],
+                [165,188],
+                [122,231],
+                [64,192],
+                [52,102]
+            ]
+        },
+        {
+            "name": "Simple",
+            "data": [
+                [100,180],
+                [100,80],
+                [300,80],
+                [300,180],
+                [250,130]
+            ]
+        },
+        {
+            "name": "Circle",
+            "data": [
+                [350,200],
+                [321.3525491562421,288.167787843871],
+                [246.3525491562421,342.658477444273],
+                [153.6474508437579,342.65847744427305],
+                [78.6474508437579,288.167787843871],
+                [50,200.00000000000003],
+                [78.64745084375788,111.83221215612905],
+                [153.64745084375787,57.34152255572698],
+                [246.35254915624208,57.341522555726954],
+                [321.3525491562421,111.832212156129]
+            ]
+        },
+        {
+            "name": "Peaks",
+            "data": [
+                [50,220.55491449129886],
+                [60,200.9165010426762],
+                [70,171.70035249020682],
+                [80,114.90970199382247],
+                [90,165.9804978067106],
+                [100,160.4772842673997],
+                [110,84.41974678190957],
+                [120,293.8773909405506],
+                [130,63.92280957183573],
+                [140,73.75740089300058],
+                [150,61.19584194167069],
+                [160,159.87092544067778],
+                [170,247.10194630714335],
+                [180,183.8388841500984],
+                [190,117.18720369155437],
+                [200,242.94006022134025],
+                [210,206.9854959619504],
+                [220,65.33570549558465],
+                [230,263.57031109249294],
+                [240,136.10471065015298],
+                [250,300],
+                [50,300]
+            ]
+        }
+    ];
+
     var path = [],
         polys = [],
         reflexVertices = [],
@@ -155,10 +235,26 @@
         collinearThreshold:0.001,
     };
     var gui = new dat.GUI();
-    gui.add(settings, 'minEdgeLength', 1, 100);
-    gui.add(settings, 'quickDecomp');
-    gui.add(settings, 'removeCollinear');
-    gui.add(settings, 'collinearThreshold',0,Math.PI/4);
+
+    var settingsFolder = gui.addFolder('Settings');
+    settingsFolder.open();
+    settingsFolder.add(settings, 'minEdgeLength', 1, 100);
+    settingsFolder.add(settings, 'quickDecomp');
+    settingsFolder.add(settings, 'removeCollinear');
+    settingsFolder.add(settings, 'collinearThreshold',0,Math.PI/4);
+
+    var polygonsFolder = gui.addFolder('Polygons');
+    polygonsFolder.open();
+    for(var i=0; i<demoPolygons.length; i++){
+        var demoPoly = demoPolygons[i];
+        settings[demoPoly.name] = (function(p){
+            return function(){
+                setPath(p.data);
+            };
+        })(demoPoly);
+        polygonsFolder.add(settings, demoPoly.name);
+    }
+    setPath(demoPolygons[0].data);
 
     function getMousePos(e){
         var offset = e.target.getBoundingClientRect();
@@ -191,11 +287,15 @@
         }
     });
 
+    function copyPath(p){
+        return JSON.parse(JSON.stringify(p));
+    }
+
     function setPath(p){
         mousedown = false;
         polys.length=0;
         reflexVertices.length = steinerPoints.length = 0;
-        path = p;
+        path = copyPath(p);
         if(p.length > 3){
             if(decomp.isSimple(p)){
                 if(decomp.makeCCW(p)){
