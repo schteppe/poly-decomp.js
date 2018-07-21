@@ -22,6 +22,13 @@
         p, h1 {
             margin-bottom: 5px;
         }
+        h1 a {
+            text-decoration: none;
+        }
+        a {
+            color: black;
+            text-decoration: underline;
+        }
         #info {
             display: block;
             background-color:#eee;
@@ -36,7 +43,6 @@
         <p>Try drawing a polygon below!</p>
     </div>
 
-    <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
     <script src="build/decomp.js"></script>
     <script src="dat.gui.js"></script>
     <script>
@@ -48,7 +54,7 @@
     var canvas = document.createElement('canvas');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    $("body").append(canvas);
+    document.body.append(canvas);
 
     function render() {
         var c = canvas.getContext('2d');
@@ -69,11 +75,13 @@
             c.fill();
             c.stroke();
 
+            c.beginPath();
             for(var i=0; i<path.length-1; i++){
-                c.beginPath();
-                c.arc(path[i][0],path[i][1],2,0,2*Math.PI);
-                c.fill();
+                var p = path[i];
+                c.moveTo(p[0],p[1]);
+                c.arc(p[0],p[1],2,0,2*Math.PI);
             }
+            c.fill();
         }
 
         // Draw the convex decomp if it exists
@@ -95,12 +103,13 @@
         c.fillStyle = "black";
         for(var i=0; i<polys.length; i++){
             var poly = polys[i];
+            c.beginPath();
             for(var j=0; j<poly.length; j++){
                 var p = poly[j];
-                c.beginPath();
+                c.moveTo(p[0],p[1]);
                 c.arc(p[0],p[1],1,0,2*Math.PI);
-                c.fill();
             }
+            c.fill();
         }
     }
     render();
@@ -119,7 +128,7 @@
     gui.add(settings, 'collinearThreshold',0,Math.PI/4);
 
     function getMousePos(e){
-        var offset = $(e.target).offset();
+        var offset = e.target.getBoundingClientRect();
         return [e.clientX - offset.left,e.clientY - offset.top];
     }
 
@@ -129,13 +138,14 @@
         return dx * dx + dy * dy;
     }
 
-    $("canvas").mousedown(function(e){
+    canvas.addEventListener('mousedown', function(e){
         path = [];
         polys = [];
         path.push(getMousePos(e));
         mousedown = true;
         render();
-    }).mousemove(function(e){
+    });
+    canvas.addEventListener('mousemove', function(e){
         if(mousedown){
             var point = getMousePos(e),
                 lengthSquared = sqdist(point,path[path.length-1]);
@@ -145,7 +155,8 @@
                 render();
             }
         }
-    }).mouseup(function(e){
+    });
+    canvas.addEventListener('mouseup', function(e){
         mousedown = false;
         if(path.length > 3){
             var p = path;
