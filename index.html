@@ -159,6 +159,63 @@
                 [250,300],
                 [50,300]
             ]
+        },
+        {
+            "name": "Bayazit1",
+            "data": [
+                [154,124],
+                [201,475],
+                [351,359],
+                [274,505],
+                [568,485],
+                [481,342],
+                [611,453],
+                [571,130],
+                [463,240],
+                [557,86],
+                [227,98],
+                [321,265]
+            ]
+        },
+        {
+            "name": "Bayazit3",
+            "data": [
+                [339,279],
+                [344,142],
+                [419,316],
+                [599,112],
+                [532,351],
+                [778,290],
+                [564,422],
+                [728,615],
+                [449,513],
+                [519,720],
+                [404,594],
+                [327,717],
+                [350,495],
+                [76,580],
+                [305,436],
+                [98,338],
+                [320,370],
+                [212,217]
+            ]
+        },
+        {
+            "name": "Bayazit4",
+            "data": [
+                [201,291],
+                [304,477],
+                [420,274],
+                [494,464],
+                [617,259],
+                [758,458],
+                [635,66],
+                [513,324],
+                [410,97],
+                [320,327],
+                [180,119],
+                [83,369]
+            ]
         }
     ];
 
@@ -355,28 +412,26 @@
 
     function setPath(p){
         mousedown = false;
-        polys.length=0;
-        reflexVertices.length = steinerPoints.length = 0;
+        polys.length = reflexVertices.length = steinerPoints.length = 0;
         path = copyPath(p);
         if(p.length > 3){
-            if(decomp.isSimple(p)){
-                if(decomp.makeCCW(p)){
+            if(decomp.isSimple(path)){
+                if(decomp.makeCCW(path)){
                     console.log("The polygon is not counter-clockwise. Reversing it...");
                 }
                 
                 if(settings.removeCollinear){
-                    console.log("Removing collinear points...");
-                    decomp.removeCollinearPoints(p, settings.collinearThreshold);
+                    console.log("Removing collinear points... " + decomp.removeCollinearPoints(path, settings.collinearThreshold) + " points removed.");
                 }
-                console.log("setPath(["+ p.map(function(point,i){
+                console.log("setPath(["+ path.map(function(point,i){
                     return "[" + point.toString() + "/*" + i +"*/]";
                 }).join(",")+"])");
 
-                console.log("Decomposing polygon of size "+p.length+"...");
+                console.log("Decomposing polygon of size "+path.length+"...");
                 if(settings.quickDecomp){
-                    decomp.quickDecomp(p,polys,reflexVertices,steinerPoints,25,100,0,p);
+                    decomp.quickDecomp(path,polys,reflexVertices,steinerPoints,25,100,0,path);
                 } else
-                    polys = decomp.decomp(p);
+                    polys = decomp.decomp(path);
                 console.log("Got "+polys.length+" convex polygons. Done.");
 
             } else {
