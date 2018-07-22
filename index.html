@@ -34,6 +34,10 @@
             background-color:#eee;
             padding:10px;
         }
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
     </style>
 </head>
 <body>
@@ -73,6 +77,53 @@
             ]
         },
         {
+            "name": "BayazitCase3",
+            "data": [
+                [160,56],
+                [177,84],
+                [196,61],
+                [214,105],
+                [316,56],
+                [318,257],
+                [219,255],
+                [202,231],
+                [184,253],
+                [166,200],
+                [53,252],
+                [56,78]
+            ]
+        },
+        {
+            "name": "BayazitCase4",
+            "data": [
+                [186,56],
+                [211,110],
+                [230,55],
+                [263,53],
+                [275,84],
+                [323,98],
+                [319,246],
+                [275,245],
+                [240,213],
+                [202,243],
+                [169,218],
+                [119,248],
+                [54,246],
+                [53,81]
+            ]
+        },
+        {
+            "name": "BayazitCase5",
+            "data": [
+                [174,160],
+                [131,112],
+                [201,270],
+                [128,240],
+                [52,270],
+                [100,52]
+            ]
+        },
+        {
             "name": "Simple",
             "data": [
                 [100,180],
@@ -80,21 +131,6 @@
                 [300,80],
                 [300,180],
                 [250,130]
-            ]
-        },
-        {
-            "name": "Circle",
-            "data": [
-                [350,200],
-                [321.3525491562421,288.167787843871],
-                [246.3525491562421,342.658477444273],
-                [153.6474508437579,342.65847744427305],
-                [78.6474508437579,288.167787843871],
-                [50,200.00000000000003],
-                [78.64745084375788,111.83221215612905],
-                [153.64745084375787,57.34152255572698],
-                [246.35254915624208,57.341522555726954],
-                [321.3525491562421,111.832212156129]
             ]
         },
         {
@@ -134,8 +170,9 @@
         colors = ["#f99","#9f9","#99f","#ff9"];
 
     var canvas = document.createElement('canvas');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    var pixelRatio = (window.devicePixelRatio||1);
+    canvas.width = window.innerWidth * pixelRatio;
+    canvas.height = window.innerHeight * pixelRatio;
     document.body.append(canvas);
 
     function render() {
@@ -147,21 +184,12 @@
         c.fillStyle = "red";
         c.strokeStyle = "black";
 
-        // draw the current path
-        c.beginPath();
-        for(var i=0; i<path.length-1; i++){
-            c.moveTo(path[i][0],path[i][1]);
-            c.lineTo(path[i+1][0],path[i+1][1]);
-        }
-        c.fill();
-        c.stroke();
-
         if(mousedown){
             c.beginPath();
             for(var i=0; i<path.length-1; i++){
                 var p = path[i];
                 c.moveTo(p[0],p[1]);
-                c.arc(p[0],p[1],2,0,2*Math.PI);
+                c.arc(p[0],p[1],3*pixelRatio,0,2*Math.PI);
             }
             c.fill();
         }
@@ -190,10 +218,22 @@
             for(var j=0; j<poly.length; j++){
                 var p = poly[j];
                 c.moveTo(p[0],p[1]);
-                c.arc(p[0],p[1],2,0,2*Math.PI);
+                c.arc(p[0],p[1],2*pixelRatio,0,2*Math.PI);
             }
             c.fill();
         }
+
+        // draw the current path
+        c.strokeStyle = decomp.isSimple(path) ? "black" : "red";
+        c.lineWidth = 2*pixelRatio;
+        c.beginPath();
+        for(var i=0; i<path.length; i++){
+            c.moveTo(path[i][0],path[i][1]);
+            c.lineTo(path[(i+1)%path.length][0],path[(i+1)%path.length][1]);
+        }
+        c.fill();
+        c.stroke();
+        c.lineWidth = 0.5*pixelRatio;
 
         if(!mousedown){
             // Draw reflex vertices
@@ -202,7 +242,7 @@
             for(var j=0; j<reflexVertices.length; j++){
                 var p = reflexVertices[j];
                 c.moveTo(p[0],p[1]);
-                c.arc(p[0],p[1],4,0,2*Math.PI);
+                c.arc(p[0],p[1],4*pixelRatio,0,2*Math.PI);
             }
             c.fill();
 
@@ -212,18 +252,20 @@
             for(var j=0; j<steinerPoints.length; j++){
                 var p = steinerPoints[j];
                 c.moveTo(p[0],p[1]);
-                c.arc(p[0],p[1],4,0,2*Math.PI);
+                c.arc(p[0],p[1],4*pixelRatio,0,2*Math.PI);
             }
             c.fill();
 
             // draw point indices
-            c.font = "10px Arial";
+            c.font = Math.floor(10*pixelRatio) + "px Arial";
             c.fillStyle = "black";
             for(var i=0; i<path.length; i++){
                 var p = path[i];
-                c.fillText(i,p[0]+3,p[1]+3);
+                c.fillText(i,p[0]+3*pixelRatio,p[1]+3*pixelRatio);
             }
         }
+
+
     }
     render();
 
@@ -243,22 +285,30 @@
     settingsFolder.add(settings, 'removeCollinear');
     settingsFolder.add(settings, 'collinearThreshold',0,Math.PI/4);
 
+    var pixelRatioScale = function(p){
+        return [p[0]*pixelRatio,p[1]*pixelRatio];
+    };
+    var currentDemoPolygon = 0;
     var polygonsFolder = gui.addFolder('Polygons');
     polygonsFolder.open();
     for(var i=0; i<demoPolygons.length; i++){
         var demoPoly = demoPolygons[i];
         settings[demoPoly.name] = (function(p){
             return function(){
-                setPath(p.data);
+                setPath(p.data.map(pixelRatioScale));
             };
         })(demoPoly);
         polygonsFolder.add(settings, demoPoly.name);
     }
-    setPath(demoPolygons[0].data);
-
+    setPath(demoPolygons[0].data.map(pixelRatioScale));
+    settings.next = function(){
+        currentDemoPolygon = (currentDemoPolygon+1)%demoPolygons.length;
+        setPath(demoPolygons[currentDemoPolygon].data.map(pixelRatioScale));
+    };
+    polygonsFolder.add(settings, "next");
     function getMousePos(e){
         var offset = e.target.getBoundingClientRect();
-        return [e.clientX - offset.left,e.clientY - offset.top];
+        return [e.clientX*pixelRatio - offset.left*pixelRatio,e.clientY*pixelRatio - offset.top*pixelRatio];
     }
 
     function sqdist(a,b){
