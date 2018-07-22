@@ -300,7 +300,19 @@
         })(demoPoly);
         polygonsFolder.add(settings, demoPoly.name);
     }
-    setPath(demoPolygons[0].data.map(pixelRatioScale));
+    var fallback = true;
+    var prefix = "#path=";
+    if(window.location.hash.indexOf(prefix)===0){
+        try {
+            setPath(window.location.hash.substr(prefix.length).split("/").map(function(p){
+                return p.split(",").map(function(strNum){ return parseFloat(strNum); });
+            }));
+            fallback = false;
+        } catch(err){}
+    }
+    if(fallback){
+        setPath(demoPolygons[0].data.map(pixelRatioScale));
+    }
     settings.next = function(){
         currentDemoPolygon = (currentDemoPolygon+1)%demoPolygons.length;
         setPath(demoPolygons[currentDemoPolygon].data.map(pixelRatioScale));
@@ -372,6 +384,13 @@
             }
         }
         render();
+
+        if(history.pushState){
+            var pathString = path.map(function(p){
+                return p[0] + "," + p[1];
+            }).join("/");
+            history.pushState(null,null,'#path='+pathString);
+        }
     }
 
     canvas.addEventListener('mouseup', function(e){
