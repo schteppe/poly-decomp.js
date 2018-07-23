@@ -1,11 +1,14 @@
 poly-decomp.js
 ==============
 
-Library for decomposing 2D polygons into convex regions.
+Library for decomposing a 2D polygon into convex pieces.
+
+![Decomposing a convcave polygon into convex regions](https://cloud.githubusercontent.com/assets/1063152/18008563/edccfe86-6ba8-11e6-9e20-a090c1812c95.gif)
 
 [Launch the demo!](http://schteppe.github.io/poly-decomp.js/)
 
-![Decomposing a convcave polygon into convex regions](https://cloud.githubusercontent.com/assets/1063152/18008563/edccfe86-6ba8-11e6-9e20-a090c1812c95.gif)
+The library implements two algorithms, one optimal (but slow) and one less optimal (but fast).
+It's is a manual port of the C++ library [Poly Decomp](https://mpen.ca/406/bayazit) by [Mark Penner](https://mpen.ca). 
 
 ### Install
 ##### Browser
@@ -159,9 +162,3 @@ npm install;                                     # Install dependencies
 grunt;                                           # Builds build/decomp.js
 ```
 The most recent commits are currently pushed to the ```master``` branch. Thanks for contributing!
-
-### About
-
-The library is a manual port of the C++ library [Poly Decomp](http://mnbayazit.com/406/overview) by [Mark Bayazit](http://mnbayazit.com/).
-
-It implements two algorithms, one optimal (but slow) and one less optimal (but fast).
