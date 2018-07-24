@@ -141,7 +141,26 @@ console.log(numRemoved + ' collinear points could be removed');
 
 Removes collinear points in the polygon. This means that if three points are placed along the same line, the middle one will be removed. The ```thresholdAngle``` is measured in radians and determines whether the points are collinear or not. Note that the input array will be modified in place.
 
+#### removeDuplicatePoints(polygon: Array&lt;Point&gt;, precision: number): void
+
+```js
+var polygon = [
+    [0,0],
+    [1,1],
+    [2,2],
+    [0,0]
+];
+decomp.removeDuplicatePoints(polygon, 0.01);
+
+// polygon is now [[1,1],[2,2],[0,0]]
+```
+
 ### Change log
+##### 0.3.0
+* Added `removeDuplicatePoints`.
+* `makeCCW` now returns true if the polygon was changed.
+* Fixed case 5 mentioned [here](https://mpen.ca/406/bayazit) and discussed [here](https://github.com/schteppe/poly-decomp.js/issues/8).
+
 ##### 0.2.1
 * Fixed bug in the collinear point removal, after this fix the algorithm is more agressive and more correct.
 
