@@ -7,6 +7,8 @@ Library for decomposing a 2D polygon into convex pieces.
 
 [Launch the demo!](http://schteppe.github.io/poly-decomp.js/)
 
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=Z2G8VHLDJ9N3L&lc=GB&item_name=Stefan%20Hedman&item_number=schteppe&currency_code=USD&bn=PP%2dDonationsBF%3aDonate%2dPayPal%2dgreen%2esvg%3aNonHosted)
+
 The library implements two algorithms, one optimal (but slow) and one less optimal (but fast).
 It's is a manual port of the C++ library [Poly Decomp](https://mpen.ca/406/bayazit) by [Mark Penner](https://mpen.ca). 
 
