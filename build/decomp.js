@@ -118,7 +118,7 @@ function collinear(a,b,c,thresholdAngle) {
         var dot = ab[0]*bc[0] + ab[1]*bc[1],
             magA = Math.sqrt(ab[0]*ab[0] + ab[1]*ab[1]),
             magB = Math.sqrt(bc[0]*bc[0] + bc[1]*bc[1]),
-            angle = Math.acos(dot/(magA*magB));
+            angle = Math.acos( Math.min(1, Math.max(0, dot/(magA*magB))) );
         return angle < thresholdAngle;
     }
 }
