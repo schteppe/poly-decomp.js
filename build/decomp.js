@@ -1,11 +1,12 @@
-!function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.decomp=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.decomp = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 module.exports = {
     decomp: polygonDecomp,
     quickDecomp: polygonQuickDecomp,
     isSimple: polygonIsSimple,
     removeCollinearPoints: polygonRemoveCollinearPoints,
     removeDuplicatePoints: polygonRemoveDuplicatePoints,
-    makeCCW: polygonMakeCCW
+    makeCCW: polygonMakeCCW,
+    lineSegmentsIntersect: lineSegmentsIntersect
 };
 
 /**
@@ -117,7 +118,7 @@ function collinear(a,b,c,thresholdAngle) {
         var dot = ab[0]*bc[0] + ab[1]*bc[1],
             magA = Math.sqrt(ab[0]*ab[0] + ab[1]*ab[1]),
             magB = Math.sqrt(bc[0]*bc[0] + bc[1]*bc[1]),
-            angle = Math.acos(dot/(magA*magB));
+            angle = Math.acos( Math.min(1, Math.max(0, dot/(magA*magB))) );
         return angle < thresholdAngle;
     }
 }
@@ -472,7 +473,7 @@ function polygonQuickDecomp(polygon, result,reflexVertices,steinerPoints,delta,m
 
     level++;
     if(level > maxlevel){
-        console.warn("quickDecomp: max level ("+maxlevel+") reached.");
+        //console.warn("quickDecomp: max level ("+maxlevel+") reached.");
         return result;
     }
 
@@ -657,6 +658,5 @@ function points_eq(a,b,precision){
     return scalar_eq(a[0],b[0],precision) && scalar_eq(a[1],b[1],precision);
 }
 
-},{}]},{},[1])
-(1)
+},{}]},{},[1])(1)
 });
