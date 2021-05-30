@@ -13,6 +13,7 @@
     "node": "*"
   },
   "main": "./src/index.js",
+  "types": "src/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/schteppe/poly-decomp.js.git"
