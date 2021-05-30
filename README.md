@@ -122,7 +122,7 @@ if(decomp.isSimple(polygon)){
 
 Returns true if any of the line segments in the polygon intersects. Use this to check if the input polygon is OK to decompose.
 
-#### makeCCW(polygon: Array&lt;Point&gt;): void
+#### makeCCW(polygon: Array&lt;Point&gt;): boolean
 
 ```js
 console.log('Polygon with clockwise winding:', polygon);
@@ -132,7 +132,7 @@ console.log('Polygon with counter-clockwise winding:', polygon);
 
 Reverses the polygon, if its vertices are not ordered counter-clockwise. Note that the input polygon array will be modified in place.
 
-#### removeCollinearPoints(polygon: Array&lt;Point&gt;, thresholdAngle: number): void
+#### removeCollinearPoints(polygon: Array&lt;Point&gt;, thresholdAngle: number): number
 
 ```js
 var before = polygon.length;
