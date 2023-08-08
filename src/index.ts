@@ -6,27 +6,27 @@ type Point = [number, number]
  * Compute the intersection between two lines.
  * @static
  * @method lineInt
- * @param  {Array}  l1          Line vector 1
- * @param  {Array}  l2          Line vector 2
- * @param  {Number} precision   Precision to use when checking if the lines are parallel
- * @return {Array}              The intersection point.
+ * @param {Array} l1 Line vector 1
+ * @param {Array} l2 Line vector 2
+ * @param {Number} precision Precision to use when checking if the lines are parallel
+ * @return {Array} The intersection point.
  */
 function lineInt(l1: Line, l2: Line, precision: number = 0): Point {
-    precision = precision || 0
-    const a1 = l1[1][1] - l1[0][1]
-    const b1 = l1[0][0] - l1[1][0]
-    const c1 = a1 * l1[0][0] + b1 * l1[0][1]
-    const a2 = l2[1][1] - l2[0][1]
-    const b2 = l2[0][0] - l2[1][0]
-    const c2 = a2 * l2[0][0] + b2 * l2[0][1]
-    const det = a1 * b2 - a2*b1
-    if (!scalar_eq(det, 0, precision)) { // lines are not parallel
-        return [
+	precision = precision || 0
+	const a1 = l1[1][1] - l1[0][1]
+	const b1 = l1[0][0] - l1[1][0]
+	const c1 = a1 * l1[0][0] + b1 * l1[0][1]
+	const a2 = l2[1][1] - l2[0][1]
+	const b2 = l2[0][0] - l2[1][0]
+	const c2 = a2 * l2[0][0] + b2 * l2[0][1]
+	const det = a1 * b2 - a2*b1
+	if (!scalar_eq(det, 0, precision)) { // lines are not parallel
+		return [
 			(b2 * c1 - b1 * c2) / det,
-        	(a1 * c2 - a2 * c1) / det,
+			(a1 * c2 - a2 * c1) / det,
 		]
-    }
-    return [0, 0]
+	}
+	return [0, 0]
 }
 
 /**
@@ -59,70 +59,70 @@ function lineSegmentsIntersect(p1: Point, p2: Point, q1: Point, q2: Point): bool
  * Get the area of a triangle spanned by the three given points. Note that the area will be negative if the points are not given in counter-clockwise order.
  * @static
  * @method area
- * @param  {Array} a
- * @param  {Array} b
- * @param  {Array} c
+ * @param {Array} a
+ * @param {Array} b
+ * @param {Array} c
  * @return {Number}
  */
 function triangleArea(a: Point, b: Point, c: Point): number {
-    return (((b[0] - a[0]) * (c[1] - a[1]))-((c[0] - a[0]) * (b[1] - a[1])))
+	return (((b[0] - a[0]) * (c[1] - a[1]))-((c[0] - a[0]) * (b[1] - a[1])))
 }
 
 function isLeft(a: Point, b: Point, c: Point){
-    return triangleArea(a,b,c) > 0
+	return triangleArea(a,b,c) > 0
 }
 
 function isLeftOn(a: Point, b: Point, c: Point) {
-    return triangleArea(a, b, c) >= 0
+	return triangleArea(a, b, c) >= 0
 }
 
 function isRight(a: Point, b: Point, c: Point) {
-    return triangleArea(a, b, c) < 0
+	return triangleArea(a, b, c) < 0
 }
 
 function isRightOn(a: Point, b: Point, c: Point) {
-    return triangleArea(a, b, c) <= 0
+	return triangleArea(a, b, c) <= 0
 }
 
 /**
  * Check if three points are collinear
  * @method collinear
- * @param  {Array} a
- * @param  {Array} b
- * @param  {Array} c
- * @param  {Number} [thresholdAngle=0] Threshold angle to use when comparing the vectors. The function will return true if the angle between the resulting vectors is less than this value. Use zero for max precision.
+ * @param {Array} a
+ * @param {Array} b
+ * @param {Array} c
+ * @param {Number} [thresholdAngle=0] Threshold angle to use when comparing the vectors. The function will return true if the angle between the resulting vectors is less than this value. Use zero for max precision.
  * @return {Boolean}
  */
 function collinear(a: Point, b: Point, c: Point, thresholdAngle: number) {
-    if (!thresholdAngle){
-        return triangleArea(a, b, c) === 0
-    } else {
-        const ab = [b[0] - a[0], b[1] - a[1]]
-        const bc = [c[0] - b[0], c[1] - b[1]]
+	if (!thresholdAngle){
+		return triangleArea(a, b, c) === 0
+	} else {
+		const ab = [b[0] - a[0], b[1] - a[1]]
+		const bc = [c[0] - b[0], c[1] - b[1]]
 
-        const dot = ab[0]*bc[0] + ab[1]*bc[1]
-        const magA = Math.sqrt(ab[0]*ab[0] + ab[1]*ab[1])
-        const magB = Math.sqrt(bc[0]*bc[0] + bc[1]*bc[1])
-        const angle = Math.acos(dot/(magA*magB))
-        return angle < thresholdAngle
-    }
+		const dot = ab[0]*bc[0] + ab[1]*bc[1]
+		const magA = Math.sqrt(ab[0]*ab[0] + ab[1]*ab[1])
+		const magB = Math.sqrt(bc[0]*bc[0] + bc[1]*bc[1])
+		const angle = Math.acos(dot/(magA*magB))
+		return angle < thresholdAngle
+	}
 }
 
 function sqdist(a: Point, b: Point){
-    var dx = b[0] - a[0]
-    var dy = b[1] - a[1]
-    return dx * dx + dy * dy
+	var dx = b[0] - a[0]
+	var dy = b[1] - a[1]
+	return dx * dx + dy * dy
 }
 
 /**
  * Get a vertex at position i. It does not matter if i is out of bounds, this function will just cycle.
  * @method at
- * @param  {Number} i
+ * @param {Number} i
  * @return {Array}
  */
 function polygonAt(polygon: Polygon, i: number) {
-    var s = polygon.length
-    return polygon[i < 0 ? i % s + s : i % s]
+	var s = polygon.length
+	return polygon[i < 0 ? i % s + s : i % s]
 }
 
 /**
@@ -131,21 +131,21 @@ function polygonAt(polygon: Polygon, i: number) {
  * @return {Array}
  */
 function polygonClear(polygon: Polygon) {
-    polygon.length = 0
+	polygon.length = 0
 }
 
 /**
  * Append points "from" to "to"-1 from an other polygon "poly" onto this one.
  * @method append
  * @param {Polygon} poly The polygon to get points from.
- * @param {Number}  from The vertex index in "poly".
- * @param {Number}  to The end vertex index in "poly". Note that this vertex is NOT included when appending.
+ * @param {Number} from The vertex index in "poly".
+ * @param {Number} to The end vertex index in "poly". Note that this vertex is NOT included when appending.
  * @return {Array}
  */
 function polygonAppend(polygon: Polygon, poly: Polygon, from: number, to: number) {
-    for (var i = from; i < to; i++){
-        polygon.push(poly[i])
-    }
+	for (var i = from; i < to; i++){
+		polygon.push(poly[i])
+	}
 }
 
 /**
@@ -153,20 +153,20 @@ function polygonAppend(polygon: Polygon, poly: Polygon, from: number, to: number
  * @method makeCCW
  */
 export function makeCCW(polygon: Polygon){
-    var br = 0
-    // find bottom right point
-    for (var i = 1; i < polygon.length; ++i) {
-        if (polygon[i][1] < polygon[br][1] || (polygon[i][1] === polygon[br][1] && polygon[i][0] > polygon[br][0])) {
-            br = i
-        }
-    }
+	var br = 0
+	// find bottom right point
+	for (var i = 1; i < polygon.length; ++i) {
+		if (polygon[i][1] < polygon[br][1] || (polygon[i][1] === polygon[br][1] && polygon[i][0] > polygon[br][0])) {
+			br = i
+		}
+	}
 
-    // reverse poly if clockwise
-    if (!isLeft(polygonAt(polygon, br - 1), polygonAt(polygon, br), polygonAt(polygon, br + 1))) {
-        polygonReverse(polygon)
-        return true
-    }
-    return false
+	// reverse poly if clockwise
+	if (!isLeft(polygonAt(polygon, br - 1), polygonAt(polygon, br), polygonAt(polygon, br + 1))) {
+		polygonReverse(polygon)
+		return true
+	}
+	return false
 }
 
 /**
@@ -174,104 +174,104 @@ export function makeCCW(polygon: Polygon){
  * @method reverse
  */
 function polygonReverse(polygon: Polygon){
-    var tmp = []
-    var N = polygon.length
-    for(var i = 0; i !== N; i++){
-        tmp.push(polygon.pop())
-    }
-    for(var i = 0; i !== N; i++){
+	var tmp = []
+	var N = polygon.length
+	for(var i = 0; i !== N; i++){
+		tmp.push(polygon.pop())
+	}
+	for(var i = 0; i !== N; i++){
 		polygon[i] = tmp[i]
-    }
+	}
 }
 
 /**
  * Check if a point in the polygon is a reflex point
  * @method isReflex
- * @param  {Number}  i
+ * @param {Number} i
  * @return {Boolean}
  */
 function polygonIsReflex(polygon: Polygon, i: number): boolean {
-    return isRight(polygonAt(polygon, i - 1), polygonAt(polygon, i), polygonAt(polygon, i + 1))
+	return isRight(polygonAt(polygon, i - 1), polygonAt(polygon, i), polygonAt(polygon, i + 1))
 }
 
 /**
  * Check if two vertices in the polygon can see each other
  * @method canSee
- * @param  {Number} a Vertex index 1
- * @param  {Number} b Vertex index 2
+ * @param {Number} a Vertex index 1
+ * @param {Number} b Vertex index 2
  * @return {Boolean}
  */
 function polygonCanSee(polygon: Polygon, a: number, b: number) {
-    if (isLeftOn(polygonAt(polygon, a + 1), polygonAt(polygon, a), polygonAt(polygon, b)) && isRightOn(polygonAt(polygon, a - 1), polygonAt(polygon, a), polygonAt(polygon, b))) {
-        return false
-    }
-    const dist = sqdist(polygonAt(polygon, a), polygonAt(polygon, b))
-    for (var i = 0; i !== polygon.length; ++i) { // for each edge
-        if ((i + 1) % polygon.length === a || i === a) { // ignore incident edges
-            continue
-        }
-        if (isLeftOn(polygonAt(polygon, a), polygonAt(polygon, b), polygonAt(polygon, i + 1)) && isRightOn(polygonAt(polygon, a), polygonAt(polygon, b), polygonAt(polygon, i))) { // if diag intersects an edge
-            const l1 = [polygonAt(polygon, a), polygonAt(polygon, b)] as const
-            const l2 = [polygonAt(polygon, i), polygonAt(polygon, i + 1)] as const
-            const p = lineInt(l1, l2)
-            if (sqdist(polygonAt(polygon, a), p) < dist) { // if edge is blocking visibility to b
-                return false
-            }
-        }
-    }
+	if (isLeftOn(polygonAt(polygon, a + 1), polygonAt(polygon, a), polygonAt(polygon, b)) && isRightOn(polygonAt(polygon, a - 1), polygonAt(polygon, a), polygonAt(polygon, b))) {
+		return false
+	}
+	const dist = sqdist(polygonAt(polygon, a), polygonAt(polygon, b))
+	for (var i = 0; i !== polygon.length; ++i) { // for each edge
+		if ((i + 1) % polygon.length === a || i === a) { // ignore incident edges
+			continue
+		}
+		if (isLeftOn(polygonAt(polygon, a), polygonAt(polygon, b), polygonAt(polygon, i + 1)) && isRightOn(polygonAt(polygon, a), polygonAt(polygon, b), polygonAt(polygon, i))) { // if diag intersects an edge
+			const l1 = [polygonAt(polygon, a), polygonAt(polygon, b)] as const
+			const l2 = [polygonAt(polygon, i), polygonAt(polygon, i + 1)] as const
+			const p = lineInt(l1, l2)
+			if (sqdist(polygonAt(polygon, a), p) < dist) { // if edge is blocking visibility to b
+				return false
+			}
+		}
+	}
 
-    return true;
+	return true;
 }
 
 /**
  * Check if two vertices in the polygon can see each other
  * @method canSee2
- * @param  {Number} a Vertex index 1
- * @param  {Number} b Vertex index 2
+ * @param {Number} a Vertex index 1
+ * @param {Number} b Vertex index 2
  * @return {Boolean}
  */
 function polygonCanSee2(polygon: Polygon, a: number, b: number): boolean {
-    // for each edge
-    for (var i = 0; i !== polygon.length; ++i) {
-        // ignore incident edges
-        if (i === a || i === b || (i + 1) % polygon.length === a || (i + 1) % polygon.length === b) {
-            continue
-        }
-        if (lineSegmentsIntersect(polygonAt(polygon, a), polygonAt(polygon, b), polygonAt(polygon, i), polygonAt(polygon, i + 1)) ) {
-            return false
-        }
-    }
-    return true
+	// for each edge
+	for (var i = 0; i !== polygon.length; ++i) {
+		// ignore incident edges
+		if (i === a || i === b || (i + 1) % polygon.length === a || (i + 1) % polygon.length === b) {
+			continue
+		}
+		if (lineSegmentsIntersect(polygonAt(polygon, a), polygonAt(polygon, b), polygonAt(polygon, i), polygonAt(polygon, i + 1)) ) {
+			return false
+		}
+	}
+	return true
 }
 
 /**
  * Copy the polygon from vertex i to vertex j.
  * @method copy
- * @param  {Number} i
- * @param  {Number} j
- * @param  {Polygon} [targetPoly]   Optional target polygon to save in.
- * @return {Polygon}                The resulting copy.
+ * @param {Number} i
+ * @param {Number} j
+ * @param {Polygon} [targetPoly] Optional target polygon to save in.
+ * @return {Polygon} The resulting copy.
  */
 function polygonCopy(polygon: Polygon, i: number, j: number, targetPoly: Polygon = []): Polygon {
-    var p = targetPoly || []
-    polygonClear(p)
-    if (i < j) {
-        // Insert all vertices from i to j
-        for(var k = i; k <= j; k++){
-            p.push(polygon[k])
-        }
-    } else {
-        // Insert vertices 0 to j
-        for(var k = 0; k <= j; k++){
-            p.push(polygon[k])
-        }
+	var p = targetPoly || []
+	polygonClear(p)
+	if (i < j) {
+		// Insert all vertices from i to j
+		for(var k = i; k <= j; k++){
+			p.push(polygon[k])
+		}
+	} else {
+		// Insert vertices 0 to j
+		for(var k = 0; k <= j; k++){
+			p.push(polygon[k])
+		}
 
-        // Insert vertices i to end
-        for(var k = i; k < polygon.length; k++){
-            p.push(polygon[k])
-        }
-    }
-    return p
+		// Insert vertices i to end
+		for(var k = i; k < polygon.length; k++){
+			p.push(polygon[k])
+		}
+	}
+	return p
 }
 
 /**
@@ -281,29 +281,29 @@ function polygonCopy(polygon: Polygon, i: number, j: number, targetPoly: Polygon
  * @return {Array}
  */
 function polygonGetCutEdges(polygon: Polygon): [Point, Point][] {
-    var min: [Point, Point][] = []
+	var min: [Point, Point][] = []
 	const tmpPoly = []
-    var nDiags = Number.MAX_VALUE
+	var nDiags = Number.MAX_VALUE
 
-    for (var i = 0; i < polygon.length; ++i) {
-        if (polygonIsReflex(polygon, i)) {
-            for (var j = 0; j < polygon.length; ++j) {
-                if (polygonCanSee(polygon, i, j)) {
-                    const tmp1 = polygonGetCutEdges(polygonCopy(polygon, i, j, tmpPoly))
-                    const tmp2 = polygonGetCutEdges(polygonCopy(polygon, j, i, tmpPoly))
-                    for(var k = 0; k < tmp2.length; k++){
-                        tmp1.push(tmp2[k])
-                    }
-                    if (tmp1.length < nDiags) {
-                        min = tmp1
-                        nDiags = tmp1.length
-                        min.push([polygonAt(polygon, i), polygonAt(polygon, j)])
-                    }
-                }
-            }
-        }
-    }
-    return min
+	for (var i = 0; i < polygon.length; ++i) {
+		if (polygonIsReflex(polygon, i)) {
+			for (var j = 0; j < polygon.length; ++j) {
+				if (polygonCanSee(polygon, i, j)) {
+					const tmp1 = polygonGetCutEdges(polygonCopy(polygon, i, j, tmpPoly))
+					const tmp2 = polygonGetCutEdges(polygonCopy(polygon, j, i, tmpPoly))
+					for(var k = 0; k < tmp2.length; k++){
+						tmp1.push(tmp2[k])
+					}
+					if (tmp1.length < nDiags) {
+						min = tmp1
+						nDiags = tmp1.length
+						min.push([polygonAt(polygon, i), polygonAt(polygon, j)])
+					}
+				}
+			}
+		}
+	}
+	return min
 }
 
 /**
@@ -312,9 +312,9 @@ function polygonGetCutEdges(polygon: Polygon): [Point, Point][] {
  * @return {Array} An array or Polygon objects.
  */
 export function decomp(polygon: Polygon): Polygon[] {
-    var edges = polygonGetCutEdges(polygon)
-    if (edges.length > 0) return polygonSlice(polygon, edges)
-    return [polygon]
+	var edges = polygonGetCutEdges(polygon)
+	if (edges.length > 0) return polygonSlice(polygon, edges)
+	return [polygon]
 }
 
 /**
@@ -345,26 +345,26 @@ function polygonSlice(polygon: Polygon, cutEdges: [Point, Point][]): Polygon[] {
 /**
  * Checks that the line segments of this polygon do not intersect each other.
  * @method isSimple
- * @param  {Array} path An array of vertices e.g. [[0,0],[0,1],...]
+ * @param {Array} path An array of vertices e.g. [[0,0],[0,1],...]
  * @return {Boolean}
  * @todo Should it check all segments with all others?
  */
 export function isSimple(path: Polygon): boolean {
-    // Check
-    for (var i = 0; i < path.length - 1; i++){
-        for (var j = 0; j < i - 1; j++){
-            if (lineSegmentsIntersect(path[i], path[i + 1], path[j], path[j + 1])){
-                return false;
-            }
-        }
-    }
-    // Check the segment between the last and the first point to all others
-    for (var i = 1; i < path.length - 2; i++){
-        if (lineSegmentsIntersect(path[0], path[path.length - 1], path[i], path[i + 1] )){
-            return false
-        }
-    }
-    return true
+	// Check
+	for (var i = 0; i < path.length - 1; i++){
+		for (var j = 0; j < i - 1; j++){
+			if (lineSegmentsIntersect(path[i], path[i + 1], path[j], path[j + 1])){
+				return false;
+			}
+		}
+	}
+	// Check the segment between the last and the first point to all others
+	for (var i = 1; i < path.length - 2; i++){
+		if (lineSegmentsIntersect(path[0], path[path.length - 1], path[i], path[i + 1] )){
+			return false
+		}
+	}
+	return true
 }
 
 function getIntersectionPoint(p1: Point, p2: Point, q1: Point, q2: Point, delta: number): Point {
@@ -384,155 +384,155 @@ function getIntersectionPoint(p1: Point, p2: Point, q1: Point, q2: Point, delta:
 /**
  * Quickly decompose the Polygon into convex sub-polygons.
  * @method quickDecomp
- * @param  {Array} result
- * @param  {Array} [reflexVertices]
- * @param  {Array} [steinerPoints]
- * @param  {Number} [delta]
- * @param  {Number} [maxlevel]
- * @param  {Number} [level]
+ * @param {Array} result
+ * @param {Array} [reflexVertices]
+ * @param {Array} [steinerPoints]
+ * @param {Number} [delta]
+ * @param {Number} [maxlevel]
+ * @param {Number} [level]
  * @return {Array}
  */
 function polygonQuickDecomp(polygon: Polygon, result: Polygon[], reflexVertices: Point[], steinerPoints: Point[], delta: number, maxlevel: number, level: number): Polygon[] {
-    maxlevel = maxlevel || 100
-    level = level || 0
-    delta = delta || 25
-    result = typeof(result) !== "undefined" ? result : []
-    reflexVertices = reflexVertices || []
-    steinerPoints = steinerPoints || []
- 	// Points
-    var upperInt: Point = [0, 0]
+	maxlevel = maxlevel || 100
+	level = level || 0
+	delta = delta || 25
+	result = typeof(result) !== "undefined" ? result : []
+	reflexVertices = reflexVertices || []
+	steinerPoints = steinerPoints || []
+	// Points
+	var upperInt: Point = [0, 0]
 	var lowerInt: Point = [0, 0]
 	var p: Point = [0, 0]
 
-    // scalars
+	// scalars
 	var upperDist = 0
 	var lowerDist = 0
 	var d = 0
 	var closestDist = 0
-    
+	
 	// Integers
 	var upperIndex = 0
 	var lowerIndex = 0
 	var closestIndex = 0
 
-    // polygons
+	// polygons
 	var lowerPoly: Polygon = []
 	var upperPoly: Polygon = []
-    var poly = polygon
-    var v = polygon
+	var poly = polygon
+	var v = polygon
 
-    if (v.length < 3) return result
+	if (v.length < 3) return result
 
-    level++
-    if (level > maxlevel) throw new Error(`quickDecomp: max level (${ maxlevel }) reached.`)
+	level++
+	if (level > maxlevel) throw new Error(`quickDecomp: max level (${ maxlevel }) reached.`)
 
-    for (var i = 0; i < polygon.length; ++i) {
-        if (polygonIsReflex(poly, i)) {
-            reflexVertices.push(poly[i])
-            upperDist = lowerDist = Number.MAX_VALUE
+	for (var i = 0; i < polygon.length; ++i) {
+		if (polygonIsReflex(poly, i)) {
+			reflexVertices.push(poly[i])
+			upperDist = lowerDist = Number.MAX_VALUE
 
 
-            for (var j = 0; j < polygon.length; ++j) {
-                if (isLeft(polygonAt(poly, i - 1), polygonAt(poly, i), polygonAt(poly, j)) && isRightOn(polygonAt(poly, i - 1), polygonAt(poly, i), polygonAt(poly, j - 1))) { // if line intersects with an edge
-                    p = getIntersectionPoint(polygonAt(poly, i - 1), polygonAt(poly, i), polygonAt(poly, j), polygonAt(poly, j - 1), delta) // find the point of intersection
-                    if (isRight(polygonAt(poly, i + 1), polygonAt(poly, i), p)) { // make sure it's inside the poly
-                        d = sqdist(poly[i], p)
-                        if (d < lowerDist) { // keep only the closest intersection
-                            lowerDist = d
-                            lowerInt = p
-                            lowerIndex = j
-                        }
-                    }
-                }
-                if (isLeft(polygonAt(poly, i + 1), polygonAt(poly, i), polygonAt(poly, j + 1)) && isRightOn(polygonAt(poly, i + 1), polygonAt(poly, i), polygonAt(poly, j))) {
-                    p = getIntersectionPoint(polygonAt(poly, i + 1), polygonAt(poly, i), polygonAt(poly, j), polygonAt(poly, j + 1), delta)
-                    if (isLeft(polygonAt(poly, i - 1), polygonAt(poly, i), p)) {
-                        d = sqdist(poly[i], p)
-                        if (d < upperDist) {
-                            upperDist = d
-                            upperInt = p
-                            upperIndex = j
-                        }
-                    }
-                }
-            }
+			for (var j = 0; j < polygon.length; ++j) {
+				if (isLeft(polygonAt(poly, i - 1), polygonAt(poly, i), polygonAt(poly, j)) && isRightOn(polygonAt(poly, i - 1), polygonAt(poly, i), polygonAt(poly, j - 1))) { // if line intersects with an edge
+					p = getIntersectionPoint(polygonAt(poly, i - 1), polygonAt(poly, i), polygonAt(poly, j), polygonAt(poly, j - 1), delta) // find the point of intersection
+					if (isRight(polygonAt(poly, i + 1), polygonAt(poly, i), p)) { // make sure it's inside the poly
+						d = sqdist(poly[i], p)
+						if (d < lowerDist) { // keep only the closest intersection
+							lowerDist = d
+							lowerInt = p
+							lowerIndex = j
+						}
+					}
+				}
+				if (isLeft(polygonAt(poly, i + 1), polygonAt(poly, i), polygonAt(poly, j + 1)) && isRightOn(polygonAt(poly, i + 1), polygonAt(poly, i), polygonAt(poly, j))) {
+					p = getIntersectionPoint(polygonAt(poly, i + 1), polygonAt(poly, i), polygonAt(poly, j), polygonAt(poly, j + 1), delta)
+					if (isLeft(polygonAt(poly, i - 1), polygonAt(poly, i), p)) {
+						d = sqdist(poly[i], p)
+						if (d < upperDist) {
+							upperDist = d
+							upperInt = p
+							upperIndex = j
+						}
+					}
+				}
+			}
 
-            // if there are no vertices to connect to, choose a point in the middle
-            if (lowerIndex === (upperIndex + 1) % polygon.length) {
-                //console.log("Case 1: Vertex("+i+"), lowerIndex("+lowerIndex+"), upperIndex("+upperIndex+"), poly.size("+polygon.length+")");
-                p[0] = (lowerInt[0] + upperInt[0]) / 2
-                p[1] = (lowerInt[1] + upperInt[1]) / 2
-                steinerPoints.push(p)
+			// if there are no vertices to connect to, choose a point in the middle
+			if (lowerIndex === (upperIndex + 1) % polygon.length) {
+				//console.log("Case 1: Vertex("+i+"), lowerIndex("+lowerIndex+"), upperIndex("+upperIndex+"), poly.size("+polygon.length+")");
+				p[0] = (lowerInt[0] + upperInt[0]) / 2
+				p[1] = (lowerInt[1] + upperInt[1]) / 2
+				steinerPoints.push(p)
 
-                if (i < upperIndex) {
-                    //lowerPoly.insert(lowerPoly.end(), poly.begin() + i, poly.begin() + upperIndex + 1);
-                    polygonAppend(lowerPoly, poly, i, upperIndex + 1)
-                    lowerPoly.push(p)
-                    upperPoly.push(p)
-                    if (lowerIndex !== 0){
-                        //upperPoly.insert(upperPoly.end(), poly.begin() + lowerIndex, poly.end());
-                        polygonAppend(upperPoly, poly,lowerIndex,poly.length)
-                    }
-                    //upperPoly.insert(upperPoly.end(), poly.begin(), poly.begin() + i + 1);
-                    polygonAppend(upperPoly, poly, 0, i + 1)
-                } else {
-                    if (i !== 0){
-                        //lowerPoly.insert(lowerPoly.end(), poly.begin() + i, poly.end());
-                        polygonAppend(lowerPoly, poly, i, poly.length)
-                    }
-                    //lowerPoly.insert(lowerPoly.end(), poly.begin(), poly.begin() + upperIndex + 1);
-                    polygonAppend(lowerPoly, poly, 0, upperIndex + 1)
-                    lowerPoly.push(p)
-                    upperPoly.push(p)
-                    //upperPoly.insert(upperPoly.end(), poly.begin() + lowerIndex, poly.begin() + i + 1);
-                    polygonAppend(upperPoly, poly, lowerIndex, i + 1)
-                }
-            } else {
-                // connect to the closest point within the triangle
-                //console.log("Case 2: Vertex("+i+"), closestIndex("+closestIndex+"), poly.size("+polygon.length+")\n");
+				if (i < upperIndex) {
+					//lowerPoly.insert(lowerPoly.end(), poly.begin() + i, poly.begin() + upperIndex + 1);
+					polygonAppend(lowerPoly, poly, i, upperIndex + 1)
+					lowerPoly.push(p)
+					upperPoly.push(p)
+					if (lowerIndex !== 0){
+						//upperPoly.insert(upperPoly.end(), poly.begin() + lowerIndex, poly.end());
+						polygonAppend(upperPoly, poly,lowerIndex,poly.length)
+					}
+					//upperPoly.insert(upperPoly.end(), poly.begin(), poly.begin() + i + 1);
+					polygonAppend(upperPoly, poly, 0, i + 1)
+				} else {
+					if (i !== 0){
+						//lowerPoly.insert(lowerPoly.end(), poly.begin() + i, poly.end());
+						polygonAppend(lowerPoly, poly, i, poly.length)
+					}
+					//lowerPoly.insert(lowerPoly.end(), poly.begin(), poly.begin() + upperIndex + 1);
+					polygonAppend(lowerPoly, poly, 0, upperIndex + 1)
+					lowerPoly.push(p)
+					upperPoly.push(p)
+					//upperPoly.insert(upperPoly.end(), poly.begin() + lowerIndex, poly.begin() + i + 1);
+					polygonAppend(upperPoly, poly, lowerIndex, i + 1)
+				}
+			} else {
+				// connect to the closest point within the triangle
+				//console.log("Case 2: Vertex("+i+"), closestIndex("+closestIndex+"), poly.size("+polygon.length+")\n");
 
-                if (lowerIndex > upperIndex) upperIndex += polygon.length
-                closestDist = Number.MAX_VALUE
+				if (lowerIndex > upperIndex) upperIndex += polygon.length
+				closestDist = Number.MAX_VALUE
 
-                if (upperIndex < lowerIndex) return result
+				if (upperIndex < lowerIndex) return result
 
-                for (var j = lowerIndex; j <= upperIndex; ++j) {
-                    if (
-                        isLeftOn(polygonAt(poly, i - 1), polygonAt(poly, i), polygonAt(poly, j)) &&
-                        isRightOn(polygonAt(poly, i + 1), polygonAt(poly, i), polygonAt(poly, j))
-                    ) {
-                        d = sqdist(polygonAt(poly, i), polygonAt(poly, j))
-                        if (d < closestDist && polygonCanSee2(poly, i, j)) {
-                            closestDist = d
-                            closestIndex = j % polygon.length
-                        }
-                    }
-                }
+				for (var j = lowerIndex; j <= upperIndex; ++j) {
+					if (
+						isLeftOn(polygonAt(poly, i - 1), polygonAt(poly, i), polygonAt(poly, j)) &&
+						isRightOn(polygonAt(poly, i + 1), polygonAt(poly, i), polygonAt(poly, j))
+					) {
+						d = sqdist(polygonAt(poly, i), polygonAt(poly, j))
+						if (d < closestDist && polygonCanSee2(poly, i, j)) {
+							closestDist = d
+							closestIndex = j % polygon.length
+						}
+					}
+				}
 
-                if (i < closestIndex) {
-                    polygonAppend(lowerPoly, poly, i, closestIndex + 1)
-                    if (closestIndex !== 0) polygonAppend(upperPoly, poly, closestIndex, v.length)
-                    polygonAppend(upperPoly, poly,0,i+1)
-                } else {
-                    if (i !== 0) polygonAppend(lowerPoly, poly, i, v.length)
-                    polygonAppend(lowerPoly, poly, 0, closestIndex + 1)
-                    polygonAppend(upperPoly, poly, closestIndex, i + 1)
-                }
-            }
+				if (i < closestIndex) {
+					polygonAppend(lowerPoly, poly, i, closestIndex + 1)
+					if (closestIndex !== 0) polygonAppend(upperPoly, poly, closestIndex, v.length)
+					polygonAppend(upperPoly, poly,0,i+1)
+				} else {
+					if (i !== 0) polygonAppend(lowerPoly, poly, i, v.length)
+					polygonAppend(lowerPoly, poly, 0, closestIndex + 1)
+					polygonAppend(upperPoly, poly, closestIndex, i + 1)
+				}
+			}
 
-            // solve smallest poly first
-            if (lowerPoly.length < upperPoly.length) {
-                polygonQuickDecomp(lowerPoly, result, reflexVertices, steinerPoints, delta, maxlevel, level)
-                polygonQuickDecomp(upperPoly, result, reflexVertices, steinerPoints, delta, maxlevel, level)
-            } else {
-                polygonQuickDecomp(upperPoly, result, reflexVertices, steinerPoints, delta, maxlevel, level)
-                polygonQuickDecomp(lowerPoly, result, reflexVertices, steinerPoints, delta, maxlevel, level)
-            }
-            return result
-        }
-    }
-    result.push(polygon)
-    return result
+			// solve smallest poly first
+			if (lowerPoly.length < upperPoly.length) {
+				polygonQuickDecomp(lowerPoly, result, reflexVertices, steinerPoints, delta, maxlevel, level)
+				polygonQuickDecomp(upperPoly, result, reflexVertices, steinerPoints, delta, maxlevel, level)
+			} else {
+				polygonQuickDecomp(upperPoly, result, reflexVertices, steinerPoints, delta, maxlevel, level)
+				polygonQuickDecomp(lowerPoly, result, reflexVertices, steinerPoints, delta, maxlevel, level)
+			}
+			return result
+		}
+	}
+	result.push(polygon)
+	return result
 }
 
 export function quickDecomp(polygon: Polygon, delta: number = 0, maxlevel: number = 100) {
@@ -542,60 +542,60 @@ export function quickDecomp(polygon: Polygon, delta: number = 0, maxlevel: numbe
 /**
  * Remove collinear points in the polygon.
  * @method removeCollinearPoints
- * @param  {Number} [precision] The threshold angle to use when determining whether two edges are collinear. Use zero for finest precision.
- * @return {Number}           The number of points removed
+ * @param {Number} [precision] The threshold angle to use when determining whether two edges are collinear. Use zero for finest precision.
+ * @return {Number} The number of points removed
  */
 export function removeCollinearPoints(polygon: Polygon, precision: number): number {
-    var num = 0
-    for (var i = polygon.length - 1; polygon.length > 3 && i >= 0; --i){
-        if (collinear(polygonAt(polygon, i - 1), polygonAt(polygon, i), polygonAt(polygon, i + 1), precision)) {
-            // Remove the middle point
-            polygon.splice(i % polygon.length, 1)
-            num++
-        }
-    }
-    return num
+	var num = 0
+	for (var i = polygon.length - 1; polygon.length > 3 && i >= 0; --i){
+		if (collinear(polygonAt(polygon, i - 1), polygonAt(polygon, i), polygonAt(polygon, i + 1), precision)) {
+			// Remove the middle point
+			polygon.splice(i % polygon.length, 1)
+			num++
+		}
+	}
+	return num
 }
 
 /**
  * Remove duplicate points in the polygon.
  * @method removeDuplicatePoints
- * @param  {Number} [precision] The threshold to use when determining whether two points are the same. Use zero for best precision.
+ * @param {Number} [precision] The threshold to use when determining whether two points are the same. Use zero for best precision.
  */
 export function removeDuplicatePoints(polygon: Polygon, precision: number){
-    for (var i = polygon.length - 1; i >= 1; --i){
-        var pi = polygon[i]
-        for (var j = i - 1; j >= 0; --j) {
-            if (points_eq(pi, polygon[j], precision)){
-                polygon.splice(i, 1)
-                continue
-            }
-        }
-    }
+	for (var i = polygon.length - 1; i >= 1; --i){
+		var pi = polygon[i]
+		for (var j = i - 1; j >= 0; --j) {
+			if (points_eq(pi, polygon[j], precision)){
+				polygon.splice(i, 1)
+				continue
+			}
+		}
+	}
 }
 
 /**
  * Check if two scalars are equal
  * @static
  * @method eq
- * @param  {Number} a
- * @param  {Number} b
- * @param  {Number} [precision]
+ * @param {Number} a
+ * @param {Number} b
+ * @param {Number} [precision]
  * @return {Boolean}
  */
 function scalar_eq(a: number, b: number, precision: number): boolean {
-    return Math.abs(a - b) <= (precision || 0)
+	return Math.abs(a - b) <= (precision || 0)
 }
 
 /**
  * Check if two points are equal
  * @static
  * @method points_eq
- * @param  {Array} a
- * @param  {Array} b
- * @param  {Number} [precision]
+ * @param {Array} a
+ * @param {Array} b
+ * @param {Number} [precision]
  * @return {Boolean}
  */
 function points_eq(a: Point, b: Point, precision: number): Boolean {
-    return scalar_eq(a[0], b[0], precision) && scalar_eq(a[1], b[1], precision)
+	return scalar_eq(a[0], b[0], precision) && scalar_eq(a[1], b[1], precision)
 }
